@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Serial:</strong>
+  <%= @item.serial %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @item.description %>
+</p>
+
+<p>
+  <strong>Scanned serial:</strong>
+  <%= @item.photo_file %>
+</p>
+
+<p>
+  <strong>Photo data:</strong>
+  <img width=640 src=<%= url_for(action: :picture, id: @item.id ) %> />
+</p>
+
+
+<%= link_to 'Edit', edit_item_path(@item) %> |
+<%= link_to 'Back', items_path %>
