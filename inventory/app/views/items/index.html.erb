@@ -1,5 +1,10 @@
 <p id="notice"><%= notice %></p>
 
+<p>
+Logged in as <%= session[:username] %>. 
+<%= link_to 'Logout', logout_path, method: :delete %>
+</p>
+
 <h1>Items</h1>
 
 <table>
