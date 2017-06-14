@@ -1,4 +1,5 @@
 class Item < ApplicationRecord
+  validates :serial, presence: true
 
   def uploaded_picture=(picture_field)
 
