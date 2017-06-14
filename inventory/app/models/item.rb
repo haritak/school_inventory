@@ -5,6 +5,8 @@ class Item < ApplicationRecord
     self.photo_data = picture_field.read
     scanned_qr = `zbarimg #{File.absolute_path(picture_field.tempfile)}`
 
+
+
   end
 
 end

@@ -10,10 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170614045727) do
+ActiveRecord::Schema.define(version: 20170614052423) do
 
   create_table "items", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string "serial"
+    t.string "serial", null: false
     t.string "description"
     t.string "page_url"
     t.binary "photo_data", limit: 16777215
