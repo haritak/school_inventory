@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  get 'admin' => 'admin#index'
+
+  controller :sessions do
+    get 'login' => :new
+    post 'login' => :create
+    delete 'logout' => :destroy 
+  end
 
   resources :users
   resources :items
@@ -10,4 +16,6 @@ Rails.application.routes.draw do
 
   get 'not_found', to: 'items#not_found'
   get 'picture', to: 'items#picture'
+
+  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
