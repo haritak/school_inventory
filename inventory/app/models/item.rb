@@ -1,5 +1,9 @@
 class Item < ApplicationRecord
   #validates :serial, presence: true
+  #
+ 
+  belongs_to :item, optional: true
+  belongs_to :user, optional: true
 
   def uploaded_picture=(picture_field)
 
@@ -37,8 +41,23 @@ class Item < ApplicationRecord
       end
     end
 
-    self.serial = serial_no if found_code
+    if found_code
+      if self.serial and self.serial.strip != ''
+        puts "Already has a serial"
+      else
+        self.serial = serial_no
+      end
+    end
 
+  end
+
+  
+  def uploaded_second_picture=(picture_field)
+    self.photo_data2 = picture_field.read
+  end
+
+  def uploaded_invoice=(invoice_field)
+    self.invoice = invoice_field.read
   end
 
 end

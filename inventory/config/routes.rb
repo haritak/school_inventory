@@ -16,6 +16,8 @@ Rails.application.routes.draw do
 
   get 'not_found', to: 'items#not_found'
   get 'picture', to: 'items#picture'
+  get 'second_picture', to: 'items#second_picture'
+  get 'invoice', to: 'items#invoice'
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

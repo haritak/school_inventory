@@ -12,13 +12,54 @@
 
 <p>
   <strong>Page URL:</strong>
-  <%= @item.page_url %>
+  <% if @item.page_url %>
+    <a href=<%= @item.page_url %>><%= @item.page_url %></a>
+  <% else %>
+    none
+  <% end %>
+
 </p>
 
 <p>
-  <strong>Photo data:</strong>
-  <img width=640 src=<%= url_for(action: :picture, id: @item.id ) %> />
+<strong>Photo:</strong>
+  <% if @item.photo_data %>
+    <br>
+    <a target="_blank" href=<%= url_for(action: :picture, id: @item.id ) %>>
+    <img width=320 src=<%= url_for(action: :picture, id: @item.id ) %> /></a>
+  <% else %>
+    none
+  <% end %>
 </p>
+
+<p>
+  <strong>Second photo:</strong>
+  <% if @item.photo_data2 %>
+    <br>
+    <a target="_blank" href=<%= url_for(action: :second_picture, id: @item.id) %> >another picture</a>
+  <% else %>
+    none
+  <% end %>
+</p>
+
+<p>
+  <strong>Invoice:</strong>
+  <% if @item.invoice %>
+    <a href=<%= url_for(action: :invoice, id: @item.id) %> >PDF</a>
+  <% else %>
+    none
+  <% end %>
+</p>
+
+<p>
+  <strong>Inside in : </strong>
+  <% if @item.item.nil? %>
+    none
+  <% else %>
+    <%= @item.item %> <!-- my container -->
+  <% end %>
+</p>
+
+<p>Last edited by <%= @item.user_id %> </p>
 
 
 <%= link_to 'Edit', edit_item_path(@item) %> |

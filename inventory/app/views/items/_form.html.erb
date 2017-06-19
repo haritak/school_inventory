@@ -27,7 +27,20 @@
   </div>
 
   <div class="field">
+    <%= form.label "Inside" %>
+    <%= form.text_field :item_id, id: :item_item_id %>
+  </div>
+
+  <div class="field">
     <%= form.file_field(:uploaded_picture, accept: "image/jpg") %> 
+  </div>
+
+  <div class="field">
+    <%= form.file_field(:uploaded_second_picture, accept: "image/jpg") %> 
+  </div>
+
+  <div class="field">
+    <%= form.file_field(:uploaded_invoice, accept: "application/pdf") %> 
   </div>
 
   <div class="actions">
