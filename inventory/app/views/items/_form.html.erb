@@ -32,14 +32,17 @@
   </div>
 
   <div class="field">
+    <%= form.label "Main photo with qr code" %>
     <%= form.file_field(:uploaded_picture, accept: "image/jpg") %> 
   </div>
 
   <div class="field">
+    <%= form.label "Second photo" %>
     <%= form.file_field(:uploaded_second_picture, accept: "image/jpg") %> 
   </div>
 
   <div class="field">
+    <%= form.label "Invoice pdf" %>
     <%= form.file_field(:uploaded_invoice, accept: "application/pdf") %> 
   </div>
 

@@ -1,6 +1,6 @@
 class ItemsController < ApplicationController
   before_action :set_item, only: [:show, :edit, :update, :destroy, :picture]
-  after_action :set_user, only: [:new, :create, :update]
+  before_action :set_user, only: [:new, :create, :update]
   after_action :set_inside_item, only: [:new, :create, :update]
 
   skip_before_action :authorize, only:[:show, :picture, :second_picture, :invoice, :not_found]

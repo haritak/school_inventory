@@ -31,11 +31,15 @@ class Item < ApplicationRecord
           #two codes found, user has to input the code manually
           puts "More than one code detected in the photo. User should type the right code manually"
           found_code = false
-          break
+          raise "More than one code detected in photo"
         end
 
 
-        serial_no = code_parts[ code_parts.length - 1 ].chomp
+        serial_no = code_parts[ code_parts.length - 1 ].strip
+        if serial_no.include?("?") #there are parameters at the end
+          serial_no = serial_no[0, serial_no.index("?")]
+        end
+
         puts serial_no
         found_code = true
       end
@@ -44,6 +48,9 @@ class Item < ApplicationRecord
     if found_code
       if self.serial and self.serial.strip != ''
         puts "Already has a serial"
+        if self.serial.strip != serial_no
+          raise "Serial in database differs from serial in uploaded image"
+        end
       else
         self.serial = serial_no
       end
