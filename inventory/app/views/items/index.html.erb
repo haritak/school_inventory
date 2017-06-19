@@ -24,7 +24,7 @@ Logged in as <%= session[:username] %>.
       <tr>
         <td><%= item.serial %></td>
         <td><%= item.description %></td>
-        <% if item.page_url!='' %>
+        <% if item.page_url and item.page_url!='' %>
           <td><a href="<%= item.page_url %>">Περισσότερα</a></td>
         <% else %>
           <td></td>
