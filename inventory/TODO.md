@@ -1,0 +1,4 @@
+ - Restrict access based on can\_add, can\_read
+ - implement inside (container)
+ - make script to insert labs and other places
+  - should make them so as to easily create labels as well
