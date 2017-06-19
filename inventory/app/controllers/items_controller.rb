@@ -3,6 +3,8 @@ class ItemsController < ApplicationController
   after_action :set_user, only: [:new, :create, :update]
   after_action :set_inside_item, only: [:new, :create, :update]
 
+  skip_before_action :authorize, only:[:show, :picture, :second_picture, :invoice, :not_found]
+
   # GET /items
   # GET /items.json
   def index
