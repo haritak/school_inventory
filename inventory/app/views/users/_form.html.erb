@@ -26,6 +26,16 @@
     <%= form.password_field :password_confirmation, id: :user_password_confirmation %>
   </div>
 
+  <div class="field">
+    <%= form.label :can_edit %>
+    <%= form.check_box :can_edit %>
+  </div>
+
+  <div class="field">
+    <%= form.label :can_add %>
+    <%= form.check_box :can_add %>
+  </div>
+
   <div class="actions">
     <%= form.submit %>
   </div>

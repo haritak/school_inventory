@@ -5,5 +5,23 @@
   <%= @user.username %>
 </p>
 
+<p>
+  <strong>can add:</strong>
+  <% if @user.can_add %>
+    True
+  <% else %>
+    False
+  <% end %>
+</p>
+
+<p>
+  <strong>can edit:</strong>
+  <% if @user.can_edit %>
+    True
+  <% else %>
+    False
+  <% end %>
+</p>
+
 <%= link_to 'Edit', edit_user_path(@user) %> |
 <%= link_to 'Back', users_path %>
