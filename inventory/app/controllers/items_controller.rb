@@ -117,6 +117,7 @@ class ItemsController < ApplicationController
 
     def set_user
       @item.user_id = session[:user_id]
+      @item.username = session[:username]
     end
 
     def set_inside_item

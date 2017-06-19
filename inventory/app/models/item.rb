@@ -5,6 +5,15 @@ class Item < ApplicationRecord
   belongs_to :item, optional: true
   belongs_to :user, optional: true
 
+  def username(user_id)
+    @username = "undef"
+    user = User.find_by(id: user_id)
+    if user!=nil 
+      @username = user.username
+    end
+    return @username
+  end
+
   def uploaded_picture=(picture_field)
 
     self.photo_data = picture_field.read

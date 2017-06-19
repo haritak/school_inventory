@@ -13,6 +13,7 @@ Logged in as <%= session[:username] %>.
       <th>Serial</th>
       <th>Description</th>
       <th>Page URL</th>
+      <th>Photo exists?</th>
       <th>Inside</th>
       <th>Last edited by</th>
       <th colspan="3"></th>
@@ -29,8 +30,15 @@ Logged in as <%= session[:username] %>.
         <% else %>
           <td></td>
         <% end %>
-        <td><%= item.item_id %></td>
-        <td><%= item.user_id %></td>
+        <td align=center >
+        <% if item.photo_data and item.photo_data!='' %>
+          true
+        <% else %>
+          
+        <% end %>
+        </td>
+        <td align=center ><%= item.item_id %></td>
+        <td align=center ><%= item.username(item.user_id) %></td>
         <td><%= link_to 'Show', item %></td>
         <td><%= link_to 'Edit', edit_item_path(item) %></td>
         <td><%= link_to 'Destroy', item, method: :delete, data: { confirm: 'Are you sure?' } %></td>
