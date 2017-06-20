@@ -1,7 +1,5 @@
 class ItemsController < ApplicationController
   before_action :set_item, only: [:show, :edit, :update, :destroy, :picture]
-  before_action :set_user, only: [:new, :create, :update]
-  after_action :set_inside_item, only: [:new, :create, :update]
 
   skip_before_action :authorize, only:[:show, :picture, :second_picture, :invoice, :not_found]
 
@@ -113,15 +111,10 @@ class ItemsController < ApplicationController
       #second try on serial number
       @item = Item.find_by(serial: params[:serial])
 
-    end
-
-    def set_user
       @item.user_id = session[:user_id]
       @item.username = session[:username]
-    end
-
-    def set_inside_item
       @item.item_id = nil
+
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
