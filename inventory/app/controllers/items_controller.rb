@@ -130,7 +130,71 @@ class ItemsController < ApplicationController
     end
   end
 
+  # GET /upload_photo
+  def upload_photo
+  end
+
+  #POST /upload_photo
+  #Code is heavily duplicated here and in item.rb
+  def search_and_place_photo
+    apath = File.absolute_path(params[:uploaded_picture].tempfile)
+    scanned_qr = `zbarimg #{apath}`
+    puts scanned_qr
+
+    redirect_to(action: not_found) && return unless scanned_qr
+
+    serial_no = ""
+    serial_found = false
+    scanned_qr.lines.each do |detected_code|
+      if detected_code =~ /srv-1tee-moiron\.ira\.sch\.gr/
+        puts "detected inventory code : #{detected_code}"
+
+        code_parts = detected_code.split('/')
+        next if not code_parts or code_parts.length == 0
+        next if not code_parts[ code_parts.length - 1]
+        next if code_parts[ code_parts.length - 1].length == 0
+
+        if serial_found
+          #two codes found, user has to input the code manually
+          puts "More than one code detected in the photo. User should type the right code manually"
+          serial_found = false
+          raise "More than one code detected in photo"
+        end
+
+        serial_no = code_parts[ code_parts.length - 1 ].strip
+        if serial_no.include?("?") #there are parameters at the end
+          serial_no = serial_no[0, serial_no.index("?")]
+        end
+
+        puts "->#{serial_no}<-"
+        serial_found = true
+      end
+    end
+
+    redirect_to(action: not_found) and return unless serial_found
+ 
+    item = Item.find_by( serial: serial_no )
+    if item == nil
+      redirect_to(action: not_found)
+      return
+    end
+
+    puts "Found item #{item.serial} that matches the scanned qr code."
+
+    @item = item
+    if not @item.photo_data
+      @item.photo_data = params[:uploaded_picture].read
+      @item.update( photo_data: @item.photo_data )
+      redirect_to( @item ) and return
+    end
+
+    @item.photo_data2 = params[:uploaded_picture].read
+    @item.update( photo_data2: @item.photo_data2 )
+    redirect_to( @item ) and return
+  end
+
   private
+
     # Use callbacks to share common setup or constraints between actions.
     def set_item
 

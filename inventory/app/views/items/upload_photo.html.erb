@@ -1,0 +1,11 @@
+<%= form_tag( '/upload_photo', multipart: true ) do  %>
+  <div class="field">
+    <%= label_tag "Photo with qr code" %>
+    <%= file_field_tag  :uploaded_picture, accept: "image/jpg"  %> 
+  </div>
+
+  <div class="actions">
+    <%= submit_tag %>
+  </div>
+<% end %>
+
