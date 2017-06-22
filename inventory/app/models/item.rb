@@ -5,9 +5,9 @@ class Item < ApplicationRecord
   belongs_to :item, optional: true
   belongs_to :user, optional: true
 
-  def username(user_id)
+  def username(uid = @user_id)
     @username = "undef"
-    user = User.find_by(id: user_id)
+    user = User.find_by(id: uid)
     if user!=nil 
       @username = user.username
     end
