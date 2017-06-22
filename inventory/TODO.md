@@ -1,3 +1,5 @@
+ - implement quantities
+ - implement upload photo with qr
  - Restrict access based on can\_add, can\_read
  - implement inside (container)
  - make script to insert labs and other places

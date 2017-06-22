@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170619144405) do
+ActiveRecord::Schema.define(version: 20170622124615) do
 
   create_table "items", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "serial", null: false
@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(version: 20170619144405) do
     t.binary "invoice", limit: 16777215
     t.bigint "item_id"
     t.bigint "user_id"
+    t.integer "quantity", default: 1
     t.index ["item_id"], name: "index_items_on_item_id"
     t.index ["serial"], name: "index_items_on_serial", unique: true
     t.index ["user_id"], name: "index_items_on_user_id"

@@ -154,6 +154,8 @@ class ItemsController < ApplicationController
                                    :uploaded_picture, 
                                    :uploaded_second_picture, 
                                    :uploaded_invoice, 
-                                   :item_id)
+                                   :item_id,
+                                   :quantity
+                                  )
     end
 end
