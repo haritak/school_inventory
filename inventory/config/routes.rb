@@ -11,13 +11,15 @@ Rails.application.routes.draw do
   resources :items
 
   get '/', to: 'items#index'
-  get '/ΚΤ/:serial', to:'items#show' #ΚΤ in greek letters
   get '/KT/:serial', to:'items#show' #KT in english letters
 
   get 'not_found', to: 'items#not_found'
   get 'picture', to: 'items#picture'
   get 'second_picture', to: 'items#second_picture'
   get 'invoice', to: 'items#invoice'
+
+  get '/upload_photo', to: 'items#upload_photo'
+  post '/upload_photo', to: 'items#search_and_place_photo'
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
