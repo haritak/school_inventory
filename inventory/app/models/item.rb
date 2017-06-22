@@ -14,6 +14,7 @@ class Item < ApplicationRecord
     return @username
   end
 
+  #Code is heavily duplicated here and in items_controller.rb
   def uploaded_picture=(picture_field)
 
     self.photo_data = picture_field.read
@@ -24,7 +25,7 @@ class Item < ApplicationRecord
     return if not scanned_qr
 
     serial_no = ""
-    found_code = false
+    serial_found = false
 
     scanned_qr.lines.each do |detected_code|
       if detected_code =~ /srv-1tee-moiron\.ira\.sch\.gr/
@@ -36,10 +37,10 @@ class Item < ApplicationRecord
         next if not code_parts[ code_parts.length - 1]
         next if code_parts[ code_parts.length - 1].length == 0
 
-        if found_code
+        if serial_found
           #two codes found, user has to input the code manually
           puts "More than one code detected in the photo. User should type the right code manually"
-          found_code = false
+          serial_found = false
           raise "More than one code detected in photo"
         end
 
@@ -50,11 +51,11 @@ class Item < ApplicationRecord
         end
 
         puts serial_no
-        found_code = true
+        serial_found = true
       end
     end
 
-    if found_code
+    if serial_found
       if self.serial and self.serial.strip != ''
         puts "Already has a serial"
         if self.serial.strip != serial_no
