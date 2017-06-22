@@ -6,9 +6,6 @@
 username = "haritak" 
 filename = "25_6_2015.inventory.txt"
 
-
-
-
 user = User.find_by(username: "haritak")
 
 if not user
@@ -21,14 +18,18 @@ puts "Press enter to continue"
 gets
 
 File.new(filename).each do |line|
-  if line =~ /(ΚΤ-[0-9]+)\s+(.*)/
+  if line =~ /(KT-[0-9]+)\s+(.*)/
     code = $1.strip
     description = $2.strip
     next if code=='' or description==''
 
 
-    Item.create( serial: code, description: description, user_id: user.id )
-    puts "#{code}: #{description} under user #{user.id} - #{user.username}"
+    begin
+      Item.create( serial: code, description: description, user_id: user.id )
+      puts "#{code}: #{description} under user #{user.id} - #{user.username}"
+    rescue ActiveRecord::RecordNotUnique => e
+      puts "Serial #{code} already exists"
+    end
   end
 end
 
