@@ -1,5 +1,5 @@
 class ItemsController < ApplicationController
-  before_action :set_item, only: [:show, :edit, :update, :destroy, :picture]
+  before_action :set_item, only: [:show, :edit, :update, :destroy, :picture, :second_picture, :invoice]
 
   skip_before_action :authorize, only:[:show, :picture, :second_picture, :invoice, :not_found]
 

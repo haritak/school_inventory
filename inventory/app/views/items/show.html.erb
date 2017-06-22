@@ -20,7 +20,6 @@
   <%= @item.note %>
 </p>
 
-
 <p>
   <strong>Page URL:</strong>
   <% if @item.page_url %>
@@ -28,7 +27,6 @@
   <% else %>
     none
   <% end %>
-
 </p>
 
 <p>
@@ -36,7 +34,8 @@
   <% if @item.photo_data %>
     <br>
     <a target="_blank" href=<%= url_for(action: :picture, id: @item.id ) %>>
-    <img width=320 src=<%= url_for(action: :picture, id: @item.id ) %> /></a>
+      <img width=320 src=<%= url_for(action: :picture, id: @item.id ) %> />
+    </a>
   <% else %>
     none
   <% end %>
@@ -46,7 +45,9 @@
   <strong>Second photo:</strong>
   <% if @item.photo_data2 %>
     <br>
-    <a target="_blank" href=<%= url_for(action: :second_picture, id: @item.id) %> >another picture</a>
+    <a target="_blank" href=<%= url_for(action: :second_picture, id: @item.id) %> >
+      click for the second picture
+    </a>
   <% else %>
     none
   <% end %>
