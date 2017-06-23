@@ -6,9 +6,15 @@ Logged in as <%= session[:username] %>.
 </p>
 
 <h1>Items</h1>
-<h2>
-  <%= link_to 'Toggle View', toggle_show_all_mine_path %>
-</h2>
+<h3>
+  <% if not session[:show_mine] %>
+    Showing all. 
+    <%= link_to 'Click to show yours.', toggle_show_all_mine_path %>
+  <% else %>
+    Showing only items added/edited by you. 
+    <%= link_to 'Click to show all.', toggle_show_all_mine_path %>
+  <% end %>
+</h3>
 
 <%= link_to 'New Item', new_item_path %>
 <p align=right><%= link_to 'Add photo', upload_photo_path %></p>

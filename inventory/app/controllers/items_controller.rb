@@ -6,7 +6,21 @@ class ItemsController < ApplicationController
   # GET /items
   # GET /items.json
   def index
-    @items = Item.all
+    if not session[:show_mine]
+      @items = Item.all 
+    else
+      @items = Item.where( user_id: session[:user_id] )
+    end
+    return @items
+  end
+
+  def toggle_show_all_mine
+    if not session[:show_mine]
+      session[:show_mine] = true
+    else
+      session[:show_mine] = false
+    end
+    redirect_to items_url
   end
 
   def not_found

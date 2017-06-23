@@ -21,5 +21,7 @@ Rails.application.routes.draw do
   get '/upload_photo', to: 'items#upload_photo'
   post '/upload_photo', to: 'items#search_and_place_photo'
 
+  get '/toggle_show_all_mine', to: 'items#toggle_show_all_mine'
+
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
