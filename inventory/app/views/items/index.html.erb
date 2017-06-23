@@ -6,51 +6,58 @@ Logged in as <%= session[:username] %>.
 </p>
 
 <h1>Items</h1>
+<h2>
+  <%= link_to 'Toggle View', toggle_show_all_mine_path %>
+</h2>
 
 <%= link_to 'New Item', new_item_path %>
 <p align=right><%= link_to 'Add photo', upload_photo_path %></p>
 
-<table>
-  <thead>
-    <tr>
-      <th>Serial</th>
-      <th>Description</th>
-      <th>Quantity</th>
-      <th>Page URL</th>
-      <th>Photo exists?</th>
-      <th>Inside</th>
-      <th>Last edited by</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @items.each do |item| %>
+<% if not @items %>
+  <p> No items to show.</p>
+<% else %>
+  <table>
+    <thead>
       <tr>
-        <td><%= item.serial %></td>
-        <td><%= item.description %></td>
-        <td><%= item.quantity %></td>
-        <% if item.page_url and item.page_url!='' %>
-          <td><a href="<%= item.page_url %>">Περισσότερα</a></td>
-        <% else %>
-          <td></td>
-        <% end %>
-        <td align=center >
-        <% if item.photo_data and item.photo_data!='' %>
-          true
-        <% else %>
-          
-        <% end %>
-        </td>
-        <td align=center ><%= item.item_id %></td>
-        <td align=center ><%= item.username(item.user_id) %></td>
-        <td><%= link_to 'Show', item %></td>
-        <td><%= link_to 'Edit', edit_item_path(item) %></td>
-        <td><%= link_to 'Destroy', item, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <th>Serial</th>
+        <th>Description</th>
+        <th>Quantity</th>
+        <th>Page URL</th>
+        <th>Photo exists?</th>
+        <th>Inside</th>
+        <th>Last edited by</th>
+        <th colspan="3"></th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+
+    <tbody>
+      <% @items.each do |item| %>
+        <tr>
+          <td><%= item.serial %></td>
+          <td><%= item.description %></td>
+          <td><%= item.quantity %></td>
+          <% if item.page_url and item.page_url!='' %>
+            <td><a href="<%= item.page_url %>">Περισσότερα</a></td>
+          <% else %>
+            <td></td>
+          <% end %>
+          <td align=center >
+            <% if item.photo_data and item.photo_data!='' %>
+              true
+            <% else %>
+
+            <% end %>
+          </td>
+          <td align=center ><%= item.item_id %></td>
+          <td align=center ><%= item.username(item.user_id) %></td>
+          <td><%= link_to 'Show', item %></td>
+          <td><%= link_to 'Edit', edit_item_path(item) %></td>
+          <td><%= link_to 'Destroy', item, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
 
 <br>
 
