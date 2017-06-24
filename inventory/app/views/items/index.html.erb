@@ -16,8 +16,16 @@ Logged in as <%= session[:username] %>.
   <% end %>
 </h3>
 
-<%= link_to 'New Item', new_item_path %>
-<p align=right><%= link_to 'Add photo', upload_photo_path %></p>
+<table width="100%">
+  <tr>
+    <td align=left>
+      <h3><%= link_to 'New Item', new_item_path %></h3>
+    </td>
+    <td align=right>
+      <h3><%= link_to 'Auto file a photo', upload_photo_path %></h3>
+    </td>
+  </tr>
+</table>
 
 <% if not @items %>
   <p> No items to show.</p>
@@ -39,8 +47,8 @@ Logged in as <%= session[:username] %>.
     <tbody>
       <% @items.each do |item| %>
         <tr>
-          <td><%= item.serial %></td>
-          <td><%= item.description %></td>
+          <td><%= link_to item.serial, item %></td>
+          <td><%= link_to item.description, item %></td>
           <td><%= item.quantity %></td>
           <% if item.page_url and item.page_url!='' %>
             <td><a href="<%= item.page_url %>">Περισσότερα</a></td>
@@ -56,8 +64,8 @@ Logged in as <%= session[:username] %>.
           </td>
           <td align=center ><%= item.item_id %></td>
           <td align=center ><%= item.username(item.user_id) %></td>
-          <td><%= link_to 'Show', item %></td>
           <td><%= link_to 'Edit', edit_item_path(item) %></td>
+          <td> ------------- </td>
           <td><%= link_to 'Destroy', item, method: :delete, data: { confirm: 'Are you sure?' } %></td>
         </tr>
       <% end %>
@@ -67,4 +75,13 @@ Logged in as <%= session[:username] %>.
 
 <br>
 
-<%= link_to 'New Item', new_item_path %>
+<table width="100%">
+  <tr>
+    <td align=left>
+      <h3><%= link_to 'New Item', new_item_path %></h3>
+    </td>
+    <td align=right>
+      <h3><%= link_to 'Auto file a photo', upload_photo_path %></h3>
+    </td>
+  </tr>
+</table>
