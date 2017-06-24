@@ -27,8 +27,6 @@ count=0
 #extra space in front of it
 File.open("2017_06.ΚωδικοίΑιθουσών.txt", encoding:"bom|utf-8").each do |line|
   line = line.strip
-  puts ">#{line}<"
-
 
   room_name = line[0, line.index(" ")]
   puts ">#{room_name}<"
@@ -49,16 +47,6 @@ File.open("2017_06.ΚωδικοίΑιθουσών.txt", encoding:"bom|utf-8").ea
     nprinters = 2
   elsif ["EN"].include?(room_name)
     npcs = 8
-  else
-    puts "SC #{room_name}"
-    puts room_name[0]
-    puts room_name[0].bytes
-    puts room_name.encode!("utf-16", "utf-8")
-    puts room_name[0]
-    puts room_name[0].bytes
-    puts "/"
-    puts ["A1", "A2"][0][0].bytes
-    puts "--"
   end
 
 
@@ -69,7 +57,7 @@ File.open("2017_06.ΚωδικοίΑιθουσών.txt", encoding:"bom|utf-8").ea
     places_name << room_name + sprintf("PR%d", i+1)
   end
   
-  break if (count+=1) > 2
+  #break if (count+=1) > 2
 end
 
 Prawn::Labels.generate("etiketes.pdf", places_name, :type => LabelsType) do |pdf, name|
