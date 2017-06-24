@@ -67,7 +67,7 @@
   <% if @item.item.nil? %>
     none
   <% else %>
-    <%= @item.item %> <!-- my container -->
+    <%= @item.item.serial %> (<%= @item.item.description %>) <!-- my container -->
   <% end %>
 </p>
 
