@@ -24,7 +24,7 @@ end
 names = []
 description = {}
 count=0
-File.open("2017_06.ΚωδικοίΑιθουσών.txt").each do |line|
+File.open("2017_06.ΚωδικοίΑιθουσών.txt", encoding:"bom|utf-8").each do |line|
   line = line.strip
 
   name = line[0, line.index(" ")]
