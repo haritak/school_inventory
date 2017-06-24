@@ -33,12 +33,18 @@ gets
 
     puts ">#{code}< >#{description}<" if t==0
 
+
     if t==1
       begin
-        Item.create( serial: code, description: description, user_id: user.id )
+        item = Item.create( serial: code, description: description, user_id: user.id )
         puts "#{code}: #{description} under user #{user.id} - #{user.username}"
       rescue ActiveRecord::RecordNotUnique => e
         puts "Serial #{code} already exists"
+      end
+      item = Item.find_by( serial: code )
+      inside_item = Item.find_by( serial: d1 )
+      if inside_item and item
+        item.update( item_id: inside_item.id )
       end
     end
   end
