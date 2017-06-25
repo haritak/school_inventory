@@ -23,5 +23,7 @@ Rails.application.routes.draw do
 
   get '/toggle_show_all_mine', to: 'items#toggle_show_all_mine'
 
+  get '/movements', to: 'item_movements#index'
+
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

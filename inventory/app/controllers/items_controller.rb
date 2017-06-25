@@ -112,7 +112,16 @@ class ItemsController < ApplicationController
 
     #set who is editing/creating
     @item.user_id = session[:user_id]
+    previous_container = @item.container
     @item.container_serial= params[:container_serial]
+    if previous_container != @item.container
+        #this is a movement  from container to @container
+        #Log this movement
+        movement = ItemMovement.create( user_id: session[:user_id],
+                                       item_id: @item.id,
+                                       container_id: previous_container ? previous_container.id : nil )
+        movement.save
+    end
 
     respond_to do |format|
       if @item.update(item_params)

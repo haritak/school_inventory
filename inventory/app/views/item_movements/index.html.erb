@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+Logged in as <%= session[:username] %>. 
+<%= link_to 'Logout', logout_path, method: :delete %>
+</p>
+
+<h1>History of Item Movements</h1>
+<h3>
+</h3>
+
+<% if not @item_movements %>
+  <p> No items to show.</p>
+<% else %>
+  <table>
+    <thead>
+      <tr>
+        <th>Item</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @item_movements.each do |item| %>
+        <tr>
+          <td> 
+            <%= item %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<br>

@@ -9,8 +9,8 @@ class Item < ApplicationRecord
 
   def username(uid = @user_id)
     @username = "undef"
-    user = User.find_by(id: uid)
-    if user!=nil 
+    @user = User.find_by(id: uid)
+    if @user!=nil 
       @username = user.username
     end
     return @username
@@ -25,7 +25,6 @@ class Item < ApplicationRecord
 
     if container 
       @container = container
-      puts "#{@container.id} and #{@container.serial}"
       update( container: @container )
     end
 
