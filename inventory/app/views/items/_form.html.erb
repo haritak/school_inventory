@@ -41,8 +41,8 @@
     <table>
       <tr>
         <td>
-          <% if @item.item %>
-            <%= text_field_tag :container_serial, @item.item.serial %>
+          <% if @item.container %>
+            <%= text_field_tag :container_serial, @item.container.serial %>
           <% else %>
             <%= text_field_tag :container_serial %>
           <% end %>

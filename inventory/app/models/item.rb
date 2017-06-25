@@ -4,7 +4,7 @@ class Item < ApplicationRecord
   #The serial may be hidden inside the photo, so it's ok
   #to submit without a serial
   
-  belongs_to :item, optional: true
+  belongs_to :container, optional: true, class_name: "Item"
   belongs_to :user, optional: true
 
   def username(uid = @user_id)
@@ -24,24 +24,24 @@ class Item < ApplicationRecord
     end
 
     if container 
-      @item = container
-      @item_id = container.id 
-      puts "#{@item.id} and #{@item.serial} and #{@item_id}"
-      update( item_id: @item_id )
+      @container = container
+      puts "#{@container.id} and #{@container.serial}"
+      update( container: @container )
     end
 
     if serial == "none"
-      update( item_id: nil )
+      update( container: nil )
     end
   end
-  def container_serial(item_id=nil)
-    if item_id
-      container = Item.find( item_id )
-      return container.serial
+
+  def container_serial(container_id=nil)
+    if container_id
+      @container = Item.find( container_id )
+      return @container.serial
     else
-      if @item_id
-        container = Item.find( @item_id )
-        return container.serial
+      if @container_id
+        @container = Item.find( @container_id )
+        return @container.serial
       end
     end
     return nil

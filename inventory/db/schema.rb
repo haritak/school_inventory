@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170622130221) do
+ActiveRecord::Schema.define(version: 20170625140315) do
 
   create_table "items", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "serial", null: false
@@ -21,13 +21,24 @@ ActiveRecord::Schema.define(version: 20170622130221) do
     t.datetime "updated_at", null: false
     t.binary "photo_data2", limit: 16777215
     t.binary "invoice", limit: 16777215
-    t.bigint "item_id"
+    t.bigint "container_id"
     t.bigint "user_id"
     t.integer "quantity", default: 1
     t.text "note"
-    t.index ["item_id"], name: "index_items_on_item_id"
+    t.index ["container_id"], name: "index_items_on_container_id"
     t.index ["serial"], name: "index_items_on_serial", unique: true
     t.index ["user_id"], name: "index_items_on_user_id"
+  end
+
+  create_table "table_movements", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.bigint "user_id"
+    t.bigint "item_id"
+    t.bigint "container_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["container_id"], name: "index_table_movements_on_container_id"
+    t.index ["item_id"], name: "index_table_movements_on_item_id"
+    t.index ["user_id"], name: "index_table_movements_on_user_id"
   end
 
   create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -40,6 +51,6 @@ ActiveRecord::Schema.define(version: 20170622130221) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
-  add_foreign_key "items", "items"
+  add_foreign_key "items", "items", column: "container_id"
   add_foreign_key "items", "users"
 end

@@ -62,8 +62,8 @@ Logged in as <%= session[:username] %>.
 
             <% end %>
           </td>
-          <td align=center ><%= item.container_serial(item.item_id) %></td>
-          <td align=center ><%= item.username(item.user_id) %></td>
+          <td align=center ><%= item.container.nil? ? "":item.container.serial %></td>
+          <td align=center ><%= item.user.nil? ? "":item.user.username %></td>
           <td><%= link_to 'Edit', edit_item_path(item) %></td>
           <td> ------------- </td>
           <td><%= link_to 'Destroy', item, method: :delete, data: { confirm: 'Are you sure?' } %></td>

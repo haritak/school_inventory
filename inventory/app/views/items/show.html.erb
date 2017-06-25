@@ -63,11 +63,11 @@
 </p>
 
 <p>
-  <strong>Inside in : </strong>
-  <% if @item.item.nil? %>
+  <strong>Container : </strong>
+  <% if @item.container.nil? %>
     none
   <% else %>
-    <%= @item.item.serial %> (<%= @item.item.description %>) <!-- my container -->
+    <%= @item.container.serial %> (<%= @item.container.description %>) <!-- my container -->
   <% end %>
 </p>
 
