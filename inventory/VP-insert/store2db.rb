@@ -44,7 +44,7 @@ gets
       item = Item.find_by( serial: code )
       inside_item = Item.find_by( serial: d1 )
       if inside_item and item
-        item.update( item_id: inside_item.id )
+        item.update( container_id: inside_item )
       end
     end
   end
