@@ -7,9 +7,9 @@ class ItemsController < ApplicationController
   # GET /items.json
   def index
     if not session[:show_mine]
-      @items = Item.all 
+      @items = Item.all.order(:serial)
     else
-      @items = Item.where( user_id: session[:user_id] )
+      @items = Item.where( user_id: session[:user_id] ).order(:serial)
     end
     return @items
   end
