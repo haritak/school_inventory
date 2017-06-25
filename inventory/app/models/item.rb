@@ -1,7 +1,9 @@
 class Item < ApplicationRecord
-  #validates :serial, presence: true
+  ##validates :serial, presence: true
   #
- 
+  #The serial may be hidden inside the photo, so it's ok
+  #to submit without a serial
+  
   belongs_to :item, optional: true
   belongs_to :user, optional: true
 
@@ -12,6 +14,32 @@ class Item < ApplicationRecord
       @username = user.username
     end
     return @username
+  end
+
+  def container_serial=(serial)
+    container = Item.find_by( serial: serial )
+    if not container
+      #second try
+      container = Item.where( "lower(serial) like '%#{serial.downcase}%'" ).first
+    end
+
+    if container 
+      @item = container
+      @item_id = container.id 
+      puts "#{@item.id} and #{@item.serial} and #{@item_id}"
+      update( item_id: @item_id )
+    end
+    if serial == "none"
+      update( item_id: nil )
+    end
+  end
+  def container_serial(item_id=nil)
+    if item_id
+      container = Item.find( item_id )
+      return container.serial
+    else
+      return nil
+    end
   end
 
   #Code is heavily duplicated here and in items_controller.rb

@@ -3,6 +3,9 @@ class ItemsController < ApplicationController
 
   skip_before_action :authorize, only:[:show, :picture, :second_picture, :invoice, :not_found]
 
+  def check_serial(serial)
+  end
+
   # GET /items
   # GET /items.json
   def index
@@ -234,7 +237,8 @@ class ItemsController < ApplicationController
                                    :uploaded_invoice, 
                                    :item_id,
                                    :quantity,
-                                   :note
+                                   :note,
+                                   :container_serial
                                   )
     end
 end

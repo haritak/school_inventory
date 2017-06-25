@@ -38,7 +38,16 @@
 
   <div class="field">
     <%= form.label "Inside" %>
-    <%= form.text_field :item_id, id: :item_item_id %>
+    <table>
+      <tr>
+        <td>
+          <%= form.text_field :container_serial %>
+        </td>
+        <td>
+          Use "none" to empty this field
+        </td>
+      </tr>
+    </table>
   </div>
 
   <div class="field">
