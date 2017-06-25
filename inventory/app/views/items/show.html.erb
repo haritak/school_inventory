@@ -71,7 +71,7 @@
   <% end %>
 </p>
 
-<p>Last edited by <%= @item.user_id %> </p>
+<p>Last edited by <%= @item.user.username %> </p>
 
 
 <%= link_to 'Edit', edit_item_path(@item) %> |

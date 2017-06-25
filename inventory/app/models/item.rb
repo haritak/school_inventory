@@ -29,6 +29,7 @@ class Item < ApplicationRecord
       puts "#{@item.id} and #{@item.serial} and #{@item_id}"
       update( item_id: @item_id )
     end
+
     if serial == "none"
       update( item_id: nil )
     end
@@ -38,8 +39,12 @@ class Item < ApplicationRecord
       container = Item.find( item_id )
       return container.serial
     else
-      return nil
+      if @item_id
+        container = Item.find( @item_id )
+        return container.serial
+      end
     end
+    return nil
   end
 
   #Code is heavily duplicated here and in items_controller.rb

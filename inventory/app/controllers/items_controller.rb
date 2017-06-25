@@ -3,9 +3,6 @@ class ItemsController < ApplicationController
 
   skip_before_action :authorize, only:[:show, :picture, :second_picture, :invoice, :not_found]
 
-  def check_serial(serial)
-  end
-
   # GET /items
   # GET /items.json
   def index
@@ -96,6 +93,7 @@ class ItemsController < ApplicationController
 
     #set who is editing/creating
     @item.user_id = session[:user_id]
+    @item.container_serial= params[:container_serial]
 
     respond_to do |format|
       if @item.save
@@ -114,6 +112,7 @@ class ItemsController < ApplicationController
 
     #set who is editing/creating
     @item.user_id = session[:user_id]
+    @item.container_serial= params[:container_serial]
 
     respond_to do |format|
       if @item.update(item_params)

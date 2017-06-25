@@ -41,7 +41,11 @@
     <table>
       <tr>
         <td>
-          <%= form.text_field :container_serial %>
+          <% if @item.item %>
+            <%= text_field_tag :container_serial, @item.item.serial %>
+          <% else %>
+            <%= text_field_tag :container_serial %>
+          <% end %>
         </td>
         <td>
           Use "none" to empty this field
