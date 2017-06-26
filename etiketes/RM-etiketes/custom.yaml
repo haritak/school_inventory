@@ -20,8 +20,20 @@ TypoLabel6511:
   row_gutter: 0
 
 
+AveryL6009_Canon:
+    paper_size: A4
+    top_margin: 66 #62.4 #2.2cm 
+    bottom_margin: 57 #59.5 #2.1cm
+    left_margin: 28.346 #1 cm
+    right_margin: 28.346 #1 cm
+    columns: 4
+    rows: 12
+    #column_gutter: 8.504
+    column_gutter: 7.1 # 0.25 cm
+    row_gutter: 0
+
 #Good quality silver labels
-AveryL6009:
+AveryL6009_HP:
     paper_size: A4
     top_margin: 66 #62.4 #2.2cm 
     bottom_margin: 54 #59.5 #2.1cm

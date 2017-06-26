@@ -27,10 +27,14 @@ names = []
   names << name  #Ενα για να μπεί στην αναφορά της καταγραφής
 end
 
-targets=["τιμολόγιο", "", "αναφορά"]
-tid=0
+##Silver labels in a different file
 
-Prawn::Labels.generate("etiketes.pdf", names, :type => "TypoLabel6511") do |pdf, name|
+names = []
+100.times do |number|
+  name = sprintf "YGL201706%03d", number
+  names << name  #Ενα για να μπεί πάνω στο αντικείμενο
+end
+Prawn::Labels.generate("etiketes-silver.pdf", names, :type => "AveryL6009_Canon") do |pdf, name|
   pdf.font "FreeMono.ttf"
   qrcode = RQRCode::QRCode.new("http://#{SRV_URL}:#{SRV_PORT}/KT/#{name}")
   svg = qrcode.as_svg
@@ -42,8 +46,5 @@ Prawn::Labels.generate("etiketes.pdf", names, :type => "TypoLabel6511") do |pdf,
   pdf.draw_text "ΕΠΑΛ",       at: [55,y], size: 10
   pdf.draw_text "ΜΟΙΡΩΝ",     at: [55,y-=10], size: 10
   pdf.draw_text katagrafi,    at: [55,y-=7], size: 7
-  pdf.draw_text targets[tid], at: [55,y-=20], size: 7
   pdf.draw_text name,         at: [55,y-=7], size: 7 
-
-  tid=0 if (tid+=1)>2
 end
