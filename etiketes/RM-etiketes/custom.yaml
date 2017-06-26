@@ -22,7 +22,7 @@ TypoLabel6511:
 
 AveryL6009_Canon:
     paper_size: A4
-    top_margin: 66 #62.4 #2.2cm 
+    top_margin: 69 #62.4 #2.2cm 
     bottom_margin: 57 #59.5 #2.1cm
     left_margin: 28.346 #1 cm
     right_margin: 28.346 #1 cm

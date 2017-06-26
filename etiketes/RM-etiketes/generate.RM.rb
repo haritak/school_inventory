@@ -4,7 +4,7 @@ require 'prawn-svg' #https://github.com/mogest/prawn-svg
 
 Prawn::Labels.types = 'custom.yaml'
 
-LabelsType = "AveryL6009"
+LabelsType = "AveryL6009_Canon"
 
 SRV_URL = "srv-1tee-moiron.ira.sch.gr"
 SRV_PORT= "3000"
@@ -34,7 +34,7 @@ File.open("2017_06.ΚωδικοίΑιθουσών.txt", encoding:"bom|utf-8").ea
   #break if (count+=1) > 2
 end
 
-Prawn::Labels.generate("etiketes.pdf", names, :type => LabelsType) do |pdf, name|
+Prawn::Labels.generate("etiketes-silver.pdf", names, :type => LabelsType) do |pdf, name|
   pdf.font "FreeMono.ttf"
   qrcode = RQRCode::QRCode.new("http://#{SRV_URL}:#{SRV_PORT}/RM/#{name}")
   svg = qrcode.as_svg
@@ -55,4 +55,4 @@ Prawn::Labels.generate("etiketes.pdf", names, :type => LabelsType) do |pdf, name
   pdf.draw_text description[name], at: [55,5], size: 9
 end
 
-if LabelsType=="AveryL6009" then puts "Watch it : SILVER LABELS!" end
+if LabelsType.start_with?("AveryL6009") then puts "Watch it : SILVER LABELS!" end
