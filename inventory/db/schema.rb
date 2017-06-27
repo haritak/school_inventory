@@ -10,7 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170625142302) do
+ActiveRecord::Schema.define(version: 20170627031205) do
+
+  create_table "item_categories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string "category"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "item_movements", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.bigint "user_id"
@@ -36,7 +43,11 @@ ActiveRecord::Schema.define(version: 20170625142302) do
     t.bigint "user_id"
     t.integer "quantity", default: 1
     t.text "note"
+    t.bigint "item_category_id_id"
+    t.bigint "item_category_id"
     t.index ["container_id"], name: "index_items_on_container_id"
+    t.index ["item_category_id"], name: "index_items_on_item_category_id"
+    t.index ["item_category_id_id"], name: "index_items_on_item_category_id_id"
     t.index ["serial"], name: "index_items_on_serial", unique: true
     t.index ["user_id"], name: "index_items_on_user_id"
   end
@@ -51,6 +62,7 @@ ActiveRecord::Schema.define(version: 20170625142302) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  add_foreign_key "items", "item_categories"
   add_foreign_key "items", "items", column: "container_id"
   add_foreign_key "items", "users"
 end

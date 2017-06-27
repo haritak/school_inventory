@@ -6,6 +6,7 @@ class Item < ApplicationRecord
   
   belongs_to :container, optional: true, class_name: "Item"
   belongs_to :user, optional: true
+  belongs_to :item_category, optional: true
 
   def username(uid = @user_id)
     @username = "undef"
