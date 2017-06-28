@@ -4,7 +4,7 @@ require 'prawn-svg' #https://github.com/mogest/prawn-svg
 
 Prawn::Labels.types = 'custom.yaml'
 
-LabelsType = "AveryL6009"
+LabelsType = "AveryL6009_Canon"
 
 SRV_URL = "srv-1tee-moiron.ira.sch.gr"
 SRV_PORT= "3000"
