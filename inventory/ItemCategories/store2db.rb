@@ -5,6 +5,7 @@
 #
 categories = {
   "SCANNER": "Κάθε είδους scanner",
+  "PRINTER": "Κάθε είδους printer",
   "WEBCAM": "Κάθε είδους web camera",
   "CAMERA": "Κάθε είδους κάμερα ή συσκευή εγγραφής βίντεο",
   "SPEAKERS": "Κάθε είδους ηχεία",
