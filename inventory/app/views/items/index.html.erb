@@ -2,6 +2,7 @@
 
 <p>
 Logged in as <%= session[:username] %>. 
+<% logged_user = User.find(session[:user_id]) %>
 <%= link_to 'Logout', logout_path, method: :delete %>
 </p>
 
@@ -35,6 +36,7 @@ Logged in as <%= session[:username] %>.
     <thead>
       <tr>
         <th>Serial</th>
+        <th>Category</th>
         <th>Description</th>
         <th>Quantity</th>
         <th>Page URL</th>
@@ -49,6 +51,7 @@ Logged in as <%= session[:username] %>.
       <% @items.each do |item| %>
         <tr>
           <td><%= link_to item.serial, item %></td>
+          <td><%= link_to item.item_category ? item.item_category.category : "", item %> </td>
           <td><%= link_to item.description, item %></td>
           <td><%= item.quantity %></td>
           <% if item.page_url and item.page_url!='' %>
@@ -65,9 +68,15 @@ Logged in as <%= session[:username] %>.
           </td>
           <td align=center ><%= item.container.nil? ? "":item.container.serial %></td>
           <td align=center ><%= item.user.nil? ? "":item.user.username %></td>
-          <td><%= link_to 'Edit', edit_item_path(item) %></td>
-          <td> ------------- </td>
-          <td><%= link_to 'Destroy', item, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          <% if logged_user.can_edit? %>
+            <td><%= link_to 'Edit', edit_item_path(item) %></td>
+            <td> ------------- </td>
+            <td><%= link_to 'Destroy', item, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          <% else %>
+            <td></td>
+            <td></td>
+            <td></td>
+          <% end %>
         </tr>
       <% end %>
     </tbody>

@@ -63,6 +63,15 @@ class ItemsController < ApplicationController
 
   # GET /items/new
   def new
+    user = User.find_by(id: session[:user_id])
+    if not user.can_add?
+      respond_to do |format|
+        format.html { redirect_to items_url, notice: "#{session[:username]} is not allowed to add." }
+        format.json { head :no_content }
+      end
+      return
+    end
+
     @item = Item.new
     #set who is editing/creating
     @item.user_id = session[:user_id]
