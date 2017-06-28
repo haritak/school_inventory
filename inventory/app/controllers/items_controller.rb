@@ -246,7 +246,8 @@ class ItemsController < ApplicationController
                                    :item_id,
                                    :quantity,
                                    :note,
-                                   :container_serial
+                                   :container_serial,
+                                   :item_category_id,
                                   )
     end
 end
