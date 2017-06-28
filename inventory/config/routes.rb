@@ -29,7 +29,7 @@ Rails.application.routes.draw do
 
   get '/movements', to: 'item_movements#index'
 
-  get /categories, to: 'item_categories#index'
+  get '/categories', to: 'item_categories#index'
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
