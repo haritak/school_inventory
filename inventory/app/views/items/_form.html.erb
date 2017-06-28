@@ -17,6 +17,13 @@
   </div>
 
   <div class="field">
+    <%= form.label :category %>
+    <%= form.collection_select :item_category_id, 
+    ItemCategory.order(:category), :id, :category, 
+    include_blank: true, prompt:true %>
+  </div>
+
+  <div class="field">
     <%= form.label :description %>
     <%= form.text_field :description, id: :item_description %>
   </div>

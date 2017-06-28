@@ -9,6 +9,7 @@ Rails.application.routes.draw do
 
   resources :users
   resources :items
+  resources :item_categories
 
   get '/', to: 'items#index'
   get '/KT/:serial', to:'items#show' #KT in english letters
@@ -27,6 +28,8 @@ Rails.application.routes.draw do
   get '/toggle_show_all_mine', to: 'items#toggle_show_all_mine'
 
   get '/movements', to: 'item_movements#index'
+
+  get '/categories', to: 'item_categories#index'
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
