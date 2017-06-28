@@ -61,7 +61,7 @@
 <p>
   <strong>Invoice:</strong>
   <% if @item.invoice %>
-    <a href=<%= url_for(action: :invoice, id: @item.id) %> >PDF</a>
+    <a href=<%= url_for(action: :invoice, id: @item.id) %> >JPG</a>
   <% else %>
     none
   <% end %>

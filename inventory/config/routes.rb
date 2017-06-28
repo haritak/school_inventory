@@ -25,6 +25,9 @@ Rails.application.routes.draw do
   get '/upload_photo', to: 'items#upload_photo'
   post '/upload_photo', to: 'items#search_and_place_photo'
 
+  get '/upload_invoice', to: 'items#upload_invoice'
+  post '/upload_invoice', to: 'items#search_and_place_invoice'
+
   get '/toggle_show_all_mine', to: 'items#toggle_show_all_mine'
 
   get '/movements', to: 'item_movements#index'

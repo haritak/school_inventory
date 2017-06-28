@@ -1,0 +1,11 @@
+<%= form_tag( '/upload_invoice', multipart: true ) do  %>
+  <div class="field">
+    <%= label_tag "Photo of invoice with qr code" %>
+    <%= file_field_tag  :uploaded_invoice, accept: "image/jpg"  %> 
+  </div>
+
+  <div class="actions">
+    <%= submit_tag %>
+  </div>
+<% end %>
+
