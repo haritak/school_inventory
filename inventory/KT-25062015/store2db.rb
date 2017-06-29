@@ -65,6 +65,13 @@ end
 unmatched_codes.each do |c, d| 
   if d.strip != ''
     puts "Matched code #{c} with #{d}"
+    begin
+      Item.create( serial: c, description: d, user_id: user.id )
+      puts "#{c}: #{d} under user #{user.id} - #{user.username}"
+    rescue ActiveRecord::RecordNotUnique => e
+      puts "Serial #{c} already exists"
+    end
+
   else
     puts "UNMATCHED CODE #{c}"
   end
