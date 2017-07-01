@@ -9,13 +9,21 @@
   </head>
 
   <body>
-    <table>
+    <table width=100%>
       <tr>
-        <td align=center>
+        <td align=left>
           <small><%= link_to 'Users', users_path %></small>
-        </td>
-        <td align=center>
           <small><%= link_to 'Items', items_path %></small>
+        </td>
+        <td align=right>
+          <small>Logged in as <%= session[:username] %>. </small>
+          <small><%= link_to 'Logout', logout_path, method: :delete %></small>
+        </td>
+      </tr>
+      <tr>
+        <td>
+        </td>
+        <td>
         </td>
       </tr>
     </table>
