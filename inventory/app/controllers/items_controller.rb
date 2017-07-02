@@ -144,41 +144,11 @@ class ItemsController < ApplicationController
   #POST /upload_photo
   #Code is heavily duplicated here and in item.rb
   def search_and_place_photo
-    apath = File.absolute_path(params[:uploaded_picture].tempfile)
-    scanned_qr = `zbarimg #{apath}`
-    puts scanned_qr
-
-    redirect_to(action: not_found) && return unless scanned_qr
-
-    serial_no = ""
-    serial_found = false
-    scanned_qr.lines.each do |detected_code|
-      if detected_code =~ /srv-1tee-moiron\.ira\.sch\.gr/
-        puts "detected inventory code : #{detected_code}"
-
-        code_parts = detected_code.split('/')
-        next if not code_parts or code_parts.length == 0
-        next if not code_parts[ code_parts.length - 1]
-        next if code_parts[ code_parts.length - 1].length == 0
-
-        if serial_found
-          #two codes found, user has to input the code manually
-          puts "More than one code detected in the photo. User should type the right code manually"
-          serial_found = false
-          raise "More than one code detected in photo"
-        end
-
-        serial_no = code_parts[ code_parts.length - 1 ].strip
-        if serial_no.include?("?") #there are parameters at the end
-          serial_no = serial_no[0, serial_no.index("?")]
-        end
-
-        puts "->#{serial_no}<-"
-        serial_found = true
-      end
+    serial_no = detect_serial_number(params[:uploaded_picture])
+    if not serial_no
+      redirect_to(action: not_found) 
+      return 
     end
-
-    redirect_to(action: not_found) and return unless serial_found
  
     item = Item.find_by( serial: serial_no )
     if item == nil
@@ -262,6 +232,42 @@ class ItemsController < ApplicationController
   end
 
   private
+    def detect_serial_number(source)
+      apath = File.absolute_path(source.tempfile)
+      scanned_qr = `zbarimg #{apath}`
+      puts scanned_qr
+
+      return nil unless scanned_qr
+
+      serial_no = ""
+      serial_found = false
+      scanned_qr.lines.each do |detected_code|
+        if detected_code =~ /srv-1tee-moiron\.ira\.sch\.gr/
+          puts "detected inventory code : #{detected_code}"
+
+          code_parts = detected_code.split('/')
+          next if not code_parts or code_parts.length == 0
+          next if not code_parts[ code_parts.length - 1]
+          next if code_parts[ code_parts.length - 1].length == 0
+
+          if serial_found
+            #two codes found, user has to input the code manually
+            puts "More than one code detected in the photo. User should type the right code manually"
+            serial_found = false
+            raise "More than one code detected in photo"
+          end
+
+          serial_no = code_parts[ code_parts.length - 1 ].strip
+          if serial_no.include?("?") #there are parameters at the end
+            serial_no = serial_no[0, serial_no.index("?")]
+          end
+
+          puts "->#{serial_no}<-"
+          serial_found = true
+        end
+      end
+      return serial_no
+    end
 
     # Use callbacks to share common setup or constraints between actions.
     def check_can_add
@@ -279,7 +285,6 @@ class ItemsController < ApplicationController
     end
 
     def set_item
-
       #first try based on id
       begin
         @item = Item.find(params[:id])
@@ -288,7 +293,6 @@ class ItemsController < ApplicationController
 
       #second try on serial number
       @item = Item.find_by(serial: params[:serial]) unless @item
-
     end
 
     # Never trust parameters from the scary internet, 
