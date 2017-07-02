@@ -1,6 +1,9 @@
 class ItemsController < ApplicationController
   before_action :set_item, only: [:show, :edit, :update, :destroy, :picture, :second_picture, :invoice]
 
+  before_action :check_can_add, only: [:new, :create]
+  before_action :check_can_edit, only:[:edit, :update, :destroy]
+
   skip_before_action :authorize, only:[:show, :picture, :second_picture, :invoice, :not_found]
 
   # GET /items
@@ -63,15 +66,6 @@ class ItemsController < ApplicationController
 
   # GET /items/new
   def new
-    user = User.find_by(id: session[:user_id])
-    if not user.can_add?
-      respond_to do |format|
-        format.html { redirect_to items_url, notice: "#{session[:username]} is not allowed to add." }
-        format.json { head :no_content }
-      end
-      return
-    end
-
     @item = Item.new
     #set who is editing/creating
     @item.user_id = session[:user_id]
@@ -79,19 +73,6 @@ class ItemsController < ApplicationController
 
   # GET /items/1/edit
   def edit
-
-    #who is trying to edit?
-    user = User.find_by(id: session[:user_id])
-
-    if not user.can_edit?
-      if @item.user_id != session[ :user_id ]
-        respond_to do |format|
-          format.html { redirect_to items_url, notice: "#{session[:username]} is not the owner of this item." }
-          format.json { head :no_content }
-        end
-        return
-      end
-    end
     @item.user_id = session[:user_id]
   end
 
@@ -147,14 +128,6 @@ class ItemsController < ApplicationController
   # DELETE /items/1
   # DELETE /items/1.json
   def destroy
-    user = User.find_by(id: session[:user_id])
-    if not user.can_edit?
-      respond_to do |format|
-        format.html { redirect_to items_url, notice: "#{session[:username]} is not allowed to delete." }
-        format.json { head :no_content }
-      end
-      return
-    end
 
     @item.destroy
 
@@ -291,6 +264,20 @@ class ItemsController < ApplicationController
   private
 
     # Use callbacks to share common setup or constraints between actions.
+    def check_can_add
+      @current_user = User.find(session[:user_id])
+      if not @current_user.can_add?
+        raise "You need the can_add right to do that"
+      end
+    end
+
+    def check_can_edit
+      @current_user = User.find(session[:user_id])
+      if not @current_user.can_edit?
+        raise "You need the can_edit right to do that"
+      end
+    end
+
     def set_item
 
       #first try based on id

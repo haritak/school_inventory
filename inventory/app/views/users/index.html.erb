@@ -2,9 +2,12 @@
 
 <h1>Users</h1>
 
+<% logged_user = User.find(session[:user_id]) %>
+
 <table>
   <thead>
     <tr>
+      <th>admin</th>
       <th>Username</th>
       <th>can_Edit</th>
       <th>can_Add</th>
@@ -15,12 +18,13 @@
   <tbody>
     <% @users.each do |user| %>
       <tr>
+        <td><%= user.is_admin %></td>
         <td><%= user.username %></td>
         <td><%= user.can_edit %></td>
         <td><%= user.can_add %></td>
-        <td><%= link_to 'Show', user %></td>
-        <td><%= link_to 'Edit', edit_user_path(user) %></td>
-        <td><%= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to('Show', user) if logged_user.is_admin? %></td>
+        <td><%= link_to('Edit', edit_user_path(user)) if logged_user.is_admin? %></td>
+        <td><%= link_to('Destroy', user, method: :delete, data: { confirm: 'Are you sure?' }) if logged_user.is_admin? %></td>
       </tr>
     <% end %>
   </tbody>

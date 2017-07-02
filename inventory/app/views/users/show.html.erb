@@ -6,6 +6,15 @@
 </p>
 
 <p>
+  <strong>is admin:</strong>
+  <% if @user.is_admin %>
+    True
+  <% else %>
+    False
+  <% end %>
+</p>
+
+<p>
   <strong>can add:</strong>
   <% if @user.can_add %>
     True

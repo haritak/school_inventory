@@ -1,6 +1,8 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
 
+  before_action :admin_only, only: [:edit, :update, :destroy, :new, :create]
+
   # GET /users
   # GET /users.json
   def index
@@ -64,12 +66,21 @@ class UsersController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
+  #
+
+    def admin_only
+      @current_user = User.find(session[:user_id])
+      if not @current_user.is_admin?
+        raise "Only an admin can do that"
+      end
+    end
+
     def set_user
       @user = User.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:username, :password, :password_confirmation, :can_edit, :can_add)
+      params.require(:user).permit(:username, :password, :password_confirmation, :can_edit, :can_add, :is_admin)
     end
 end

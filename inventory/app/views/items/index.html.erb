@@ -64,7 +64,7 @@
           </td>
           <td align=center ><%= item.container.nil? ? "":item.container.serial %></td>
           <td align=center ><%= item.user.nil? ? "":item.user.username %></td>
-          <% if logged_user.can_edit? %>
+          <% if logged_user.can_edit? or session[:user_id] == item.user_id %>
             <td><%= link_to 'Edit', edit_item_path(item) %></td>
             <td> ------------- </td>
             <td><%= link_to 'Destroy', item, method: :delete, data: { confirm: 'Are you sure?' } %></td>
