@@ -41,6 +41,11 @@
     <%= form.check_box :can_add %>
   </div>
 
+  <div class="field">
+    <%= form.label :rooms %>
+    <%= form.text_field :rooms, id: :user_rooms %>
+  </div>
+
   <div class="actions">
     <%= form.submit %>
   </div>

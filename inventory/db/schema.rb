@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170701054945) do
+ActiveRecord::Schema.define(version: 20170704172741) do
 
   create_table "item_categories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "category", null: false
@@ -59,6 +59,7 @@ ActiveRecord::Schema.define(version: 20170701054945) do
     t.boolean "can_edit"
     t.boolean "can_add"
     t.boolean "is_admin", default: false
+    t.string "rooms"
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
