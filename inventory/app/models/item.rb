@@ -101,13 +101,24 @@ class Item < ApplicationRecord
 
   end
 
-  
+  def uploaded_picture
+    self.photo_data
+  end
+
   def uploaded_second_picture=(picture_field)
     self.photo_data2 = picture_field.read
   end
 
+  def uploaded_second_picture
+    self.photo_data2
+  end
+
   def uploaded_invoice=(invoice_field)
     self.invoice = invoice_field.read
+  end
+
+  def uploaded_invoice
+    self.invoice
   end
 
 end

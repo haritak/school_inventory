@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   resources :users
   resources :items
   resources :item_categories
+  resources :item_edits #TODO : To remove
 
   get '/', to: 'items#index'
   get '/KT/:serial', to:'items#show' #KT in english letters

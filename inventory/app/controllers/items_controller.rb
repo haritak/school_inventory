@@ -128,6 +128,8 @@ class ItemsController < ApplicationController
         movement.save
     end
 
+    create_item_edits(@item, item_params)
+
     respond_to do |format|
       if @item.update(item_params)
         format.html { redirect_to @item, notice: 'Item was successfully updated.' }
@@ -218,6 +220,28 @@ class ItemsController < ApplicationController
   end
 
   private
+
+    def create_item_edits(i, p)
+      p.each do |k,v|
+        old_v = i.send(k)
+        new_v = v
+        if k.include?("photo") or k.include?("invoice")
+          #it's an image
+          new_v = v.read
+        end
+
+        if new_v.to_s != old_v.to_s
+          #it's some other field
+          item_edit = ItemEdit.new( item_id: i.id,
+                                   field_name: k, old_value: old_v, 
+                                   new_value: new_v,
+                                   user_id: session[:user_id])
+          item_edit.save
+
+        end
+      end
+    end
+
     def detect_serial_number(source)
       apath = File.absolute_path(source.tempfile)
       scanned_qr = `zbarimg #{apath}`
