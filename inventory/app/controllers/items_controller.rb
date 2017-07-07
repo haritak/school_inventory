@@ -89,7 +89,7 @@ class ItemsController < ApplicationController
   # GET /items/new
   def new
     @item = Item.new
-    @item.user_id = session[:user_id]
+    #set who is creating
   end
 
   # GET /items/1/edit
@@ -100,15 +100,7 @@ class ItemsController < ApplicationController
   # POST /items.json
   def create
     @item = Item.new(item_params)
-
-    #set who is creating
-    @current_user = User.find( session[:user_id] )
-    if not @current_user.is_admin?
-      raise "Not your room" if not @item.container
-      if not @item.container.serial.downcase.include?(@current_user.rooms.downcase)
-        raise "Not your room"
-      end
-    end
+    @item.user_id = session[:user_id]
     @item.container_serial= params[:container_serial]
 
     respond_to do |format|
@@ -278,12 +270,6 @@ class ItemsController < ApplicationController
 
       if not @current_user.can_edit?
         raise "You need the can_edit right to do that"
-      end
-
-      container = @item.container
-      rooms = @current_user.rooms.downcase
-      if container==nil or (rooms and not rooms.include? container.serial.downcase)
-          raise "Not your room"
       end
     end
 
