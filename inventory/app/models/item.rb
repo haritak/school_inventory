@@ -8,6 +8,11 @@ class Item < ApplicationRecord
   belongs_to :user, optional: true
   belongs_to :item_category, optional: true
 
+  def destroy
+    self.burned = true
+    self.save
+  end
+
   def username(uid = @user_id)
     @username = "undef"
     @user = User.find_by(id: uid)

@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   resources :item_edits #TODO : To remove
 
   get '/', to: 'items#index'
+  get '/destroyed', to: 'items#destroyed'
   get '/KT/:serial', to:'items#show' #KT in english letters
   get '/RM/:serial', to:'items#show' #Rooms
   get '/I/:serial', to:'items#show' #I english letters Items

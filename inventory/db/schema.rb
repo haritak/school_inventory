@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170707143731) do
+ActiveRecord::Schema.define(version: 20170707181923) do
 
   create_table "item_categories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "category", null: false
@@ -57,6 +57,7 @@ ActiveRecord::Schema.define(version: 20170707143731) do
     t.integer "quantity", default: 1
     t.text "note"
     t.bigint "item_category_id"
+    t.boolean "burned", default: false
     t.index ["container_id"], name: "index_items_on_container_id"
     t.index ["item_category_id"], name: "index_items_on_item_category_id"
     t.index ["serial"], name: "index_items_on_serial", unique: true
