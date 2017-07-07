@@ -1,6 +1,7 @@
- - implement quantities
- - implement upload photo with qr
- - Restrict access based on can\_add, can\_read
- - implement inside (container)
- - make script to insert labs and other places
-  - should make them so as to easily create labels as well
+1) Complete το destroy
+2) Complete to item_movements
+3) Complete το item_edits
+4) restrict access
+5) show what it contains
+
+6) Beta testing
