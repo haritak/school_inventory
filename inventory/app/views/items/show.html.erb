@@ -39,7 +39,7 @@
   <% if @item.photo_data %>
     <br>
     <a target="_blank" href=<%= url_for(action: :picture, id: @item.id ) %>>
-      <img width=320 src=<%= url_for(action: :picture, id: @item.id ) %> />
+      <img width=320 src=<%= url_for(action: :picture_thumb, id: @item.id ) %> />
     </a>
   <% else %>
     none

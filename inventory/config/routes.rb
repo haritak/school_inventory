@@ -19,6 +19,7 @@ Rails.application.routes.draw do
 
   get 'not_found', to: 'items#not_found'
   get 'picture', to: 'items#picture'
+  get 'picture_thumb', to: 'items#picture_thumb'
   get 'second_picture', to: 'items#second_picture'
   get 'invoice', to: 'items#invoice'
 

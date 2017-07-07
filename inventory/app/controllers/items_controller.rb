@@ -1,10 +1,10 @@
 class ItemsController < ApplicationController
-  before_action :set_item, only: [:show, :edit, :update, :destroy, :picture, :second_picture, :invoice]
+  before_action :set_item, only: [:show, :edit, :update, :destroy, :picture, :picture_thumb, :second_picture, :invoice]
 
   before_action :check_can_add, only: [:new, :create]
   before_action :check_can_edit, only:[:edit, :update, :destroy]
 
-  skip_before_action :authorize, only:[:show, :picture, :second_picture, :invoice, :not_found]
+  skip_before_action :authorize, only:[:show, :picture, :picture_thumb, :second_picture, :invoice, :not_found]
 
   # GET /items
   # GET /items.json
@@ -46,6 +46,29 @@ class ItemsController < ApplicationController
               disposition: "inline")
   end
 
+  def picture_thumb
+    return if not @item
+    return if not @item.photo_data
+    thumbnail = "#{@item.serial}-photo_data-thumb.jpg"
+
+    filename = "thumbnails/#{thumbnail}"
+    
+    tmp_filename = "#{filename}.tmp"
+    if not File.exist?(filename)
+      FileUtils.mkdir("thumbnails") if not File.exist?("thumbnails")
+
+      File.open( tmp_filename, "wb") do |f|
+        f.write @item.photo_data
+      end
+      `convert #{tmp_filename} -resize 320 #{filename}`
+    elsif File.exist?(tmp_filename)
+      FileUtils.rm tmp_filename
+    end
+
+    send_file(filename)
+
+  end
+
   def second_picture
     return if not @item
     return if not @item.photo_data2
@@ -83,6 +106,13 @@ class ItemsController < ApplicationController
 
     #set who is editing/creating
     @item.user_id = session[:user_id]
+    @current_user = User.find( session[:user_id] )
+    if not @current_user.is_admin?
+      raise "Not your room" if not @item.container
+      if not @item.container.serial.downcase.include?(@current_user.rooms.downcase)
+        raise "Not your room"
+      end
+    end
     @item.container_serial= params[:container_serial]
 
     respond_to do |format|
@@ -250,8 +280,17 @@ class ItemsController < ApplicationController
 
     def check_can_edit
       @current_user = User.find(session[:user_id])
+
+      return if @current_user.is_admin?
+
       if not @current_user.can_edit?
         raise "You need the can_edit right to do that"
+      end
+
+      container = @item.container
+      rooms = @current_user.rooms.downcase
+      if container==nil or (rooms and not rooms.include? container.serial.downcase)
+          raise "Not your room"
       end
     end
 
