@@ -66,7 +66,6 @@ class ItemsController < ApplicationController
     end
 
     send_file(filename)
-
   end
 
   def second_picture
@@ -90,13 +89,11 @@ class ItemsController < ApplicationController
   # GET /items/new
   def new
     @item = Item.new
-    #set who is editing/creating
     @item.user_id = session[:user_id]
   end
 
   # GET /items/1/edit
   def edit
-    @item.user_id = session[:user_id]
   end
 
   # POST /items
@@ -104,8 +101,7 @@ class ItemsController < ApplicationController
   def create
     @item = Item.new(item_params)
 
-    #set who is editing/creating
-    @item.user_id = session[:user_id]
+    #set who is creating
     @current_user = User.find( session[:user_id] )
     if not @current_user.is_admin?
       raise "Not your room" if not @item.container
@@ -129,9 +125,6 @@ class ItemsController < ApplicationController
   # PATCH/PUT /items/1
   # PATCH/PUT /items/1.json
   def update
-
-    #set who is editing/creating
-    @item.user_id = session[:user_id]
     previous_container = @item.container
     @item.container_serial= params[:container_serial]
     if previous_container != @item.container
