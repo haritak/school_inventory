@@ -6,13 +6,20 @@ class ItemsController < ApplicationController
 
   skip_before_action :authorize, only:[:show, :picture, :picture_thumb, :second_picture, :invoice, :not_found]
 
+  Thumbs_Directory = "./thumbnails/"
+
+  def destroyed
+    @items = Item.where( burned: true ).order(:serial)
+    render :index
+  end
+
   # GET /items
   # GET /items.json
   def index
     if not session[:show_mine]
-      @items = Item.all.order(:serial)
+      @items = Item.where( burned: false).order(:serial)
     else
-      @items = Item.where( user_id: session[:user_id] ).order(:serial)
+      @items = Item.where( user_id: session[:user_id], burned: false ).order(:serial)
     end
     return @items
   end
@@ -49,20 +56,22 @@ class ItemsController < ApplicationController
   def picture_thumb
     return if not @item
     return if not @item.photo_data
-    thumbnail = "#{@item.serial}-photo_data-thumb.jpg"
 
-    filename = "thumbnails/#{thumbnail}"
+    thumbnail = "#{@item.id}-photo_data-thumb.jpg" #do not use the serial, as it is editable
+    filename = "#{Thumbs_Directory}#{thumbnail}"
     
     tmp_filename = "#{filename}.tmp"
+
     if not File.exist?(filename)
-      FileUtils.mkdir("thumbnails") if not File.exist?("thumbnails")
+      FileUtils.mkdir(Thumbs_Directory) if not File.exist?(Thumbs_Directory)
 
       File.open( tmp_filename, "wb") do |f|
         f.write @item.photo_data
       end
       `convert #{tmp_filename} -resize 320 #{filename}`
     elsif File.exist?(tmp_filename)
-      FileUtils.rm tmp_filename
+      #remove all temporary files under Thumbs_Directory
+      FileUtils.rm Dir.glob "#{Thumbs_Directory}*.tmp"
     end
 
     send_file(filename)
