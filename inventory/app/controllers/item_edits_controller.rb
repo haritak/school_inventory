@@ -1,8 +1,12 @@
 class ItemEditsController < ApplicationController
   before_action :set_edit, only: [:destroy]
 
-  def index
-    @item_edits = ItemEdit.all.order(:created_at)
+  def index(item=nil)
+    if not item
+      @item_edits = ItemEdit.all.order(:created_at)
+    else
+      @item_edits = ItemEdit.where( item_id: item.id).order(:created_at)
+    end
   end
 
   def destroy

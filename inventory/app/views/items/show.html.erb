@@ -1,8 +1,10 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Serial:</strong>
+<strong>Serial:</strong> 
   <%= @item.serial %>
+  created by <%= @item.user.username %> <br>
+  Last edited by <%= ItemMovementsController::last_editor(@item) %>
 </p>
 
 <p>
@@ -68,20 +70,21 @@
 </p>
 
 <p>
-  <strong>Container : </strong>
+  <strong>Current Container : </strong>
   <% if @item.container.nil? %>
     none
   <% else %>
     <%= @item.container.serial %> (<%= @item.container.description %>) <!-- my container -->
   <% end %>
+  <br>
 </p>
+
 
 <p>
-  <strong>Container : </strong>
-  <%= @item.container %>
+<%= link_to ' history of movements for this item', movements_path(@item) %>
+<br>
+<%= link_to "history of edits for this item", edits_path(@item) %> 
 </p>
-
-<p>Created by <%= @item.user.username %> </p>
 
 
 <%= link_to 'Edit', edit_item_path(@item) %> |
