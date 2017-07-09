@@ -1,83 +1,101 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-<strong>Serial:</strong> 
-  <%= @item.serial %>
-  created by <%= @item.user.username %> <br>
-  Last edited by <%= ItemMovementsController::last_editor(@item) %>
-</p>
+<table border=1>
+  <tr>
+    <td>
+      <p>
+      <strong>Serial:</strong> 
+      <%= @item.serial %>
+      created by <%= @item.user.username %> <br>
+      Last edited by <%= ItemMovementsController::last_editor(@item) %>
+    </p>
+    </td>
+    <td>Contents of this item</td>
+  </tr>
+  <tr>
+    <td>
 
-<p>
-  <strong>Category:</strong>
-  <%= @item.item_category.category if @item.item_category %>
-</p>
+    <p>
+    <strong>Category:</strong>
+    <%= @item.item_category.category if @item.item_category %>
+    </p>
 
-<p>
-  <strong>Description:</strong>
-  <%= @item.description %>
-</p>
+    <p>
+    <strong>Description:</strong>
+    <%= @item.description %>
+    </p>
 
-<p>
-  <strong>Quantity:</strong>
-  <%= @item.quantity %>
-</p>
+    <p>
+    <strong>Quantity:</strong>
+    <%= @item.quantity %>
+    </p>
 
-<p>
-  <strong>Notes:</strong>
-  <%= @item.note %>
-</p>
+    <p>
+    <strong>Notes:</strong>
+    <%= @item.note %>
+    </p>
 
-<p>
-  <strong>Page URL:</strong>
-  <% if @item.page_url %>
-    <a href=<%= @item.page_url %>><%= @item.page_url %></a>
-  <% else %>
-    none
-  <% end %>
-</p>
+    <p>
+    <strong>Page URL:</strong>
+    <% if @item.page_url %>
+      <a href=<%= @item.page_url %>><%= @item.page_url %></a>
+    <% else %>
+      none
+    <% end %>
+    </p>
 
-<p>
-<strong>Photo:</strong>
-  <% if @item.photo_data %>
+    <p>
+    <strong>Photo:</strong>
+    <% if @item.photo_data %>
+      <br>
+      <a target="_blank" href=<%= url_for(action: :picture, id: @item.id ) %>>
+        <img width=320 src=<%= url_for(action: :picture_thumb, id: @item.id ) %> />
+      </a>
+    <% else %>
+      none
+    <% end %>
+    </p>
+
+    <p>
+    <strong>Second photo:</strong>
+    <% if @item.photo_data2 %>
+      <br>
+      <a target="_blank" href=<%= url_for(action: :second_picture, id: @item.id) %> >
+        click for the second picture
+      </a>
+    <% else %>
+      none
+    <% end %>
+    </p>
+
+    <p>
+    <strong>Invoice:</strong>
+    <% if @item.invoice %>
+      <a target="_blank" href=<%= url_for(action: :invoice, id: @item.id) %> >JPG</a>
+    <% else %>
+      none
+    <% end %>
+    </p>
+
+    <p>
+    <strong>Current Container : </strong>
+    <% if @item.container.nil? %>
+      none
+    <% else %>
+      <%= link_to "#{@item.container.serial} ( #{@item.container.description})", @item.container %>
+    <% end %>
     <br>
-    <a target="_blank" href=<%= url_for(action: :picture, id: @item.id ) %>>
-      <img width=320 src=<%= url_for(action: :picture_thumb, id: @item.id ) %> />
-    </a>
-  <% else %>
-    none
-  <% end %>
-</p>
-
-<p>
-  <strong>Second photo:</strong>
-  <% if @item.photo_data2 %>
-    <br>
-    <a target="_blank" href=<%= url_for(action: :second_picture, id: @item.id) %> >
-      click for the second picture
-    </a>
-  <% else %>
-    none
-  <% end %>
-</p>
-
-<p>
-  <strong>Invoice:</strong>
-  <% if @item.invoice %>
-    <a target="_blank" href=<%= url_for(action: :invoice, id: @item.id) %> >JPG</a>
-  <% else %>
-    none
-  <% end %>
-</p>
-
-<p>
-  <strong>Current Container : </strong>
-  <% if @item.container.nil? %>
-    none
-  <% else %>
-    <%= @item.container.serial %> (<%= @item.container.description %>) <!-- my container -->
-  <% end %>
-  <br>
-</p>
+    </p>
+    </td>
+    <td>
+      <ul>
+      <% @item.get_immediate_contents.each do |item| %>
+        <li> <%= link_to "#{item.serial} #{item.description}", item %></li>
+      <% end %>
+      </ul>
+    </td>
+  </tr>
+</table>
 
 
 <p>

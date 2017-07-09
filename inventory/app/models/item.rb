@@ -143,4 +143,8 @@ class Item < ApplicationRecord
     self.invoice
   end
 
+  def get_immediate_contents
+    a = Item.where( container_id: self.id )
+  end
+
 end
