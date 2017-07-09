@@ -1,3 +1,5 @@
+Last edited by TODO -> make it a link to the history of edits.
+
 When uploading a new photo, delete thumbnails
 
 1) Complete το destroy
