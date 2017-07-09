@@ -1,9 +1,9 @@
 class ItemMovementsController < ApplicationController
-  def index(item=nil)
-    if not item
+  def index
+    if not params[:id]
       @item_movements = ItemMovement.all
     else
-      @item_movements = ItemMovement.where( item_id: item.id )
+      @item_movements = ItemMovement.where( item_id: params[:id] )
     end
   end
 

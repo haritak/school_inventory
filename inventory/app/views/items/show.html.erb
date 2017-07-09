@@ -99,9 +99,9 @@
 
 
 <p>
-<%= link_to ' history of movements for this item', movements_path(@item) %>
+<%= link_to ' history of movements for this item', movements_path(id: @item.id) %>
 <br>
-<%= link_to "history of edits for this item", edits_path(@item) %> 
+<%= link_to "history of edits for this item", edits_path(id: @item.id) %> 
 </p>
 
 

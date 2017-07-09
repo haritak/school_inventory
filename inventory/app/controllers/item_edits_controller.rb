@@ -1,11 +1,11 @@
 class ItemEditsController < ApplicationController
   before_action :set_edit, only: [:destroy]
 
-  def index(item=nil)
-    if not item
+  def index
+    if not params[:id]
       @item_edits = ItemEdit.all.order(:created_at)
     else
-      @item_edits = ItemEdit.where( item_id: item.id).order(:created_at)
+      @item_edits = ItemEdit.where( item_id: params[:id]).order(:created_at)
     end
   end
 

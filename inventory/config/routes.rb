@@ -33,9 +33,9 @@ Rails.application.routes.draw do
 
   get '/toggle_show_all_mine', to: 'items#toggle_show_all_mine'
 
-  get '/movements', to: 'item_movements#index'
+  get '/movements/:id', to: 'item_movements#index', as: "movements"
 
-  get '/edits', to: 'item_edits#index'
+  get '/edits/:id', to: 'item_edits#index', as: "edits"
 
   get '/categories', to: 'item_categories#index'
 
