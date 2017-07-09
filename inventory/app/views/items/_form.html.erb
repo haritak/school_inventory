@@ -63,17 +63,33 @@
 
   <div class="field">
     <%= form.label "Main photo with qr code" %>
+    <p>
+    <% if @item.photo_data %>
+      <br>
+      <a target="_blank" href=<%= url_for(action: :picture, id: @item.id ) %>>
+        <img width=320 src=<%= url_for(action: :picture_thumb, id: @item.id ) %> />
+      </a>
+    <% else %>
+      none
+    <% end %>
+    </p>
     <%= form.file_field(:uploaded_picture, accept: "image/jpg") %> 
+    <%= form.label "Remove photo" %>
+    <%= form.check_box :remove_photo %>
   </div>
 
   <div class="field">
     <%= form.label "Second photo" %>
     <%= form.file_field(:uploaded_second_picture, accept: "image/jpg") %> 
+    <%= form.label "Remove second photo" %>
+    <%= form.check_box :remove_second_photo %>
   </div>
 
   <div class="field">
     <%= form.label "Invoice jpg" %>
     <%= form.file_field(:uploaded_invoice, accept: "image/jpg") %> 
+    <%= form.label "Remove invoice" %>
+    <%= form.check_box :remove_invoice %>
   </div>
 
   <div class="actions">

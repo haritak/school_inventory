@@ -55,6 +55,11 @@ class Item < ApplicationRecord
   #Code is heavily duplicated here and in items_controller.rb
   def uploaded_picture=(picture_field)
 
+    if picture_field==nil
+      self.photo_data = nil
+      return
+    end
+
     self.photo_data = picture_field.read
     scanned_qr = `zbarimg #{File.absolute_path(picture_field.tempfile)}`
 
@@ -111,6 +116,12 @@ class Item < ApplicationRecord
   end
 
   def uploaded_second_picture=(picture_field)
+
+    if picture_field == nil
+      self.photo_data2 = nil
+      return
+    end
+
     self.photo_data2 = picture_field.read
   end
 
@@ -119,6 +130,12 @@ class Item < ApplicationRecord
   end
 
   def uploaded_invoice=(invoice_field)
+
+    if invoice_field == nil
+      self.invoice = nil
+      return
+    end
+
     self.invoice = invoice_field.read
   end
 

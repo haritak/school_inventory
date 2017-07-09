@@ -53,6 +53,15 @@ class ItemsController < ApplicationController
               disposition: "inline")
   end
 
+  def remove_picture_thumb
+    thumbnail = "#{@item.id}-photo_data-thumb.jpg" #do not use the serial, as it is editable
+    filename = "#{Thumbs_Directory}#{thumbnail}"
+    begin
+      FileUtils.rm filename
+    rescue 
+    end
+  end
+
   def picture_thumb
     return if not @item
     return if not @item.photo_data
@@ -137,10 +146,29 @@ class ItemsController < ApplicationController
         movement.save
     end
 
-    create_item_edits(@item, item_params)
+    processed_params = item_params
+
+    if processed_params[:remove_photo] == "1"
+      processed_params.merge!( uploaded_picture: nil )
+      puts "removing photo"
+    end
+    if processed_params[:remove_second_photo] == "1"
+      processed_params.merge!( uploaded_second_picture: nil )
+    end
+    if processed_params[:remove_invoice] == "1"
+      processed_params.merge!( uploaded_invoice: nil )
+    end
+
+    processed_params.delete :remove_photo
+    processed_params.delete :remove_second_photo
+    processed_params.delete :remove_invoice
+
+    remove_picture_thumb
+
+    create_item_edits(@item, processed_params)
 
     respond_to do |format|
-      if @item.update(item_params)
+      if @item.update( processed_params )
         format.html { redirect_to @item, notice: 'Item was successfully updated.' }
         format.json { render :show, status: :ok, location: @item }
       else
@@ -236,7 +264,7 @@ class ItemsController < ApplicationController
         new_v = v
         if k.include?("photo") or k.include?("invoice")
           #it's an image
-          new_v = v.read
+          new_v = (v!=nil ? v.read : nil)
         end
 
         if new_v.to_s != old_v.to_s
@@ -331,6 +359,9 @@ class ItemsController < ApplicationController
                                    :note,
                                    :container_serial,
                                    :item_category_id,
+                                   :remove_photo,
+                                   :remove_second_photo,
+                                   :remove_invoice,
                                   )
     end
 end
