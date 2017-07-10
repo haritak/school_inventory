@@ -11,11 +11,14 @@ class ItemEditsController < ApplicationController
 
   def destroy
 
-    @item_edit.destroy
+    current_user = User.find( session[:user_id] )
+    if current_user.is_admin? 
+      @item_edit.destroy
 
-    respond_to do |format|
-      format.html { redirect_to item_edits_url, notice: 'Edit was successfully destroyed.' }
-      format.json { head :no_content }
+      respond_to do |format|
+        format.html { redirect_to item_edits_url, notice: 'Edit was successfully destroyed.' }
+        format.json { head :no_content }
+      end
     end
   end
 
