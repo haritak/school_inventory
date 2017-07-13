@@ -1,3 +1,6 @@
+Να υπάρχει η δυνατότητα ενοποίησης(;) δύο σειριακών αριθμών.
+Για παράδειγμα ότι το KT-123 είναι το I-123 στο δικό μας σύστημα.
+
 When a QRcode is signed -> indicate whether is valid or not
 Last edited by TODO -> make it a link to the history of edits.
 
