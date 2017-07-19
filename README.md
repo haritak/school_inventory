@@ -84,3 +84,9 @@
 ### Δυνατότητα υπογραγραμμένων QR-codes 
 
 Υπάρχει η πρόβλεψη κάποια QR-codes να είναι υπογεγραμμένα με secure hash. Στην περίπτωση ενός τέτοιου QR-code, το σύστημα μπορεί να ελέγχει αν είναι γνήσιο.
+
+
+
+
+
+[![](https://codescene.io/projects/1479/status.svg) Get more details at **codescene.io**.](https://codescene.io/projects/1479/jobs/latest-successful/results)
