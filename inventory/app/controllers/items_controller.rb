@@ -121,6 +121,10 @@ class ItemsController < ApplicationController
     @item.user_id = session[:user_id]
     @item.container_serial= params[:container_serial]
 
+    processed_params.delete :remove_photo
+    processed_params.delete :remove_second_photo
+    processed_params.delete :remove_invoice
+
     respond_to do |format|
       if @item.save
         format.html { redirect_to @item, notice: 'Item was successfully created.' }
