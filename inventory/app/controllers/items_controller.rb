@@ -117,13 +117,21 @@ class ItemsController < ApplicationController
   # POST /items
   # POST /items.json
   def create
-    
-    #following parameters are not stored in database
-    item_params[:item].delete :remove_photo
-    item_params[:item].delete :remove_second_photo
-    item_params[:item].delete :remove_invoice
 
-    @item = Item.new(item_params)
+    # 
+    # ! item_params cannot be altered !
+    #
+    # Trying to delete an attribute will simply fail.
+    # TODO : need a reference here to explain why.
+    #
+    processed_params = item_params
+
+    #following parameters are not stored in database
+    processed_params.delete :remove_photo
+    processed_params.delete :remove_second_photo
+    processed_params.delete :remove_invoice
+
+    @item = Item.new(processed_params)
     @item.user_id = session[:user_id]
     @item.container_serial= params[:container_serial]
 
