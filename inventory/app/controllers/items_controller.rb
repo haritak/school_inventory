@@ -233,9 +233,13 @@ class ItemsController < ApplicationController
       redirect_to( @item ) and return
     end
 
-    @item.photo_data2 = params[:uploaded_picture].read
-    @item.update( photo_data2: @item.photo_data2 )
-    redirect_to( @item ) and return
+    if not @item.photo_data2
+      @item.photo_data2 = params[:uploaded_picture].read
+      @item.update( photo_data2: @item.photo_data2 )
+      redirect_to( @item ) and return
+    end
+
+    raise "Both photos have been uploaded. Remove a photo to upload a new one."
   end
 
   # GET /upload_invoice
