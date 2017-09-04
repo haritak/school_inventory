@@ -117,10 +117,11 @@ class ItemsController < ApplicationController
   # POST /items
   # POST /items.json
   def create
+    
     #following parameters are not stored in database
-    item_params.delete :remove_photo
-    item_params.delete :remove_second_photo
-    item_params.delete :remove_invoice
+    item_params[:item].delete :remove_photo
+    item_params[:item].delete :remove_second_photo
+    item_params[:item].delete :remove_invoice
 
     @item = Item.new(item_params)
     @item.user_id = session[:user_id]
