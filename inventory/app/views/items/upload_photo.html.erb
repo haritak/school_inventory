@@ -1,11 +1,25 @@
 <%= form_tag( '/upload_photo', multipart: true ) do  %>
+  <p>
+  </p>
+
   <div class="field">
-    <%= label_tag "Photo with qr code" %>
-    <%= file_field_tag  :uploaded_picture, accept: "image/jpg"  %> 
+  </div>
+
+  <div class="field">
+    <table>
+      <tr>
+        <td><%= label_tag "Photo with qr code" %></td>
+        <td><%= file_field_tag  :uploaded_picture, accept: "image/jpg"  %> </td>
+      </tr>
+      <tr>
+        <td><%= label_tag "Create item entry if it doesn't exist." %></td>
+        <td><%= check_box_tag  "create_entry", true  %> </td>
+      </tr>
+    </table>
   </div>
 
   <div class="actions">
-    <%= submit_tag %>
+    <%= submit_tag 'Start Uploading' %>
   </div>
 <% end %>
 

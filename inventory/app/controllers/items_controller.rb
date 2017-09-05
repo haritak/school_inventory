@@ -213,15 +213,19 @@ class ItemsController < ApplicationController
   #Code is heavily duplicated here and in item.rb
   def search_and_place_photo
     serial_no = detect_serial_number(params[:uploaded_picture])
-    if not serial_no
-      redirect_to(action: not_found) 
-      return 
-    end
+    raise "QR-code not readable." if not serial_no
+    serial_no.strip!
+    raise "QR-code not readable (2)." if serial_no==""
  
     item = Item.find_by( serial: serial_no )
-    if item == nil
-      redirect_to(action: not_found)
-      return
+    if item == nil 
+      if not params[:create_entry]
+        redirect_to(action: not_found)
+        return
+      elsif params[:create_entry] == "true"
+        item = Item.create( serial: serial_no, user_id: session[:user_id] )
+        item.save
+      end
     end
 
     puts "Found item #{item.serial} that matches the scanned qr code."
@@ -380,6 +384,7 @@ class ItemsController < ApplicationController
                                    :remove_photo,
                                    :remove_second_photo,
                                    :remove_invoice,
+                                   :create_entry
                                   )
     end
 end
