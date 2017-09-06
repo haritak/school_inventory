@@ -7,17 +7,29 @@ gets
 
 items = Item.all
 items.each do |i|
-  filename = sprintf "%010d", i.id
-  filename = "#{i.id}"
+  FileUtils.mkdir "item_images" if not File.exist? "item_images"
+
+  filename_base = "item_images/#{i.id}"
   if i.photo_data
-    puts "#{filename}.photo.1.jpg"
+    filename = "#{filename_base}.photo.1.jpg"
+    puts "Exporting into #{filename}"
+    File.open( filename, "wb" ) do |file|
+      file.write i.photo_data
+    end
   end
   if i.photo_data2
-    puts "#{filename}.photo.2.jpg"
+    filename = "#{filename_base}.photo.2.jpg"
+    puts "Exporting into #{filename}"
+    File.open( filename, "wb" ) do |file|
+      file.write i.photo_data2
+    end
   end
   if i.invoice
-    puts "invoice"
-    puts "#{filename}.invoice.1.jpg"
+    filename = "#{filename_base}.invoice.1.jpg"
+    puts "Exporting into #{filename}"
+    File.open( filename, "wb" ) do |file|
+      file.write i.invoice
+    end
   end
 end
 
