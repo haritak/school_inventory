@@ -40,4 +40,14 @@ Rails.application.routes.draw do
   get '/categories', to: 'item_categories#index'
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  #
+ 
+
+  #----- Temporarily enabled for debugging : ( TODO )
+  resources :item_photos
+  resources :primary_photos
+  resources :secondary_photos
+  resources :invoice_photos
+  #----------
+
 end
