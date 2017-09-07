@@ -1,0 +1,2 @@
+class PrimaryPhoto < ItemPhoto
+end

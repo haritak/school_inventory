@@ -1,0 +1,2 @@
+class SecondaryPhoto < ItemPhoto
+end
