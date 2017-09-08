@@ -8,6 +8,11 @@ class Item < ApplicationRecord
   belongs_to :user, optional: true
   belongs_to :item_category, optional: true
 
+  has_many :item_photos
+  has_one :primary_photo
+  has_one :secondary_photo
+  has_one :invoice_photo
+
   def destroy
     self.burned = true
     self.save
@@ -52,20 +57,30 @@ class Item < ApplicationRecord
     return nil
   end
 
+
+  def uploaded_picture
+    self.primary_photo
+  end
+
   #Code is heavily duplicated here and in items_controller.rb
   def uploaded_picture=(picture_field)
 
     if picture_field==nil
-      self.photo_data = nil
+      remove_photo_file( 1 )
       return
     end
 
-    self.photo_data = picture_field.read
-    scanned_qr = `zbarimg #{File.absolute_path(picture_field.tempfile)}`
+    accept_photo_file( picture_field.tempfile )
 
+    #Try to get the qrcode, but don't fail on that
+    scanned_qr = `zbarimg #{File.absolute_path(picture_field.tempfile)}`
     puts scanned_qr
 
     return if not scanned_qr
+    
+    #
+    #Do the rest only if a scanned code is detected
+    #
 
     serial_no = ""
     serial_found = false
@@ -111,32 +126,28 @@ class Item < ApplicationRecord
 
   end
 
-  def uploaded_picture
-    self.photo_data
-  end
-
   def uploaded_second_picture=(picture_field)
 
     if picture_field == nil
-      self.photo_data2 = nil
+      remove_photo_file( 2 )
       return
     end
 
-    self.photo_data2 = picture_field.read
+    accept_photo_file( picture_field.tempfile, 2 )
   end
 
   def uploaded_second_picture
-    self.photo_data2
+    self.secondary_photo
   end
 
   def uploaded_invoice=(invoice_field)
 
     if invoice_field == nil
-      self.invoice = nil
+      remove_photo_file( 3 )
       return
     end
 
-    self.invoice = invoice_field.read
+    accept_photo_file( invoice_field.tempfile, 3 )
   end
 
   def uploaded_invoice
@@ -147,4 +158,74 @@ class Item < ApplicationRecord
     a = Item.where( container_id: self.id )
   end
 
+  def invoice
+    return nil if item_photos.length == 0
+    if item_photos.length>1
+      item_photos.each do |ip|
+        return true if ip.description == "invoice"
+      end
+    end
+
+    return false
+  end
+
+  private
+
+  # photo_type:
+  #  1 - primary photo
+  #  2 - secondary photo
+  #  3 - invoice photo
+  #  other - just a photo
+  def accept_photo_file( tmp_file, photo_type = 1 )
+    #Calculate sha256 used as the base filename
+    sha256 = `sha256sum #{File.absolute_path(tmp_file)}`
+
+    raise "SHA256 calculation error." if not sha256
+    raise "SHA256 calculation error." if sha256.length==0
+    sha256 = sha256.split()
+    raise "SHA256 calculation error." if sha256.length==0
+    sha256 = sha256[0]
+    raise "SHA256 calculation error." if sha256.length<10
+
+    puts sha256
+
+    #move the uploaded file to our Photos_Directory
+    uploaded_filename = File.absolute_path( tmp_file )
+    stored_filename_relative = "#{ItemsController::Photos_Directory}#{sha256}.jpg"
+    stored_filename = File.absolute_path( stored_filename_relative )
+    FileUtils.mv( uploaded_filename, stored_filename )
+
+    #file the photo 
+    pp = nil
+    if photo_type == 1
+      pp = PrimaryPhoto.create( item: self,
+                               filename: "#{sha256}.jpg" )
+    elsif photo_type == 2
+      pp = SecondaryPhoto.create( item: self,
+                               filename: "#{sha256}.jpg" )
+    elsif photo_type == 3
+      pp = InvoicePhoto.create( item: self,
+                               filename: "#{sha256}.jpg" )
+    else
+      pp = ItemPhoto.create( item: self,
+                               filename: "#{sha256}.jpg" )
+    end
+
+    pp.save
+
+  end
+
+  def remove_photo_file( photo_type = 1 )
+    target = nil
+    case photo_type
+    when 1
+      target = self.primary_photo
+    when 2
+      target = self.secondary_photo
+    when 3
+      target = self.invoice_photo
+    end
+
+    target.destroy if target
+    #actually the file is not removed for tracing reasons
 end

@@ -9,6 +9,7 @@ tmp/**/*
 **/tmp/**/*
 **/*.pdf
 item_images
+item_photos
 
 
 # Ignore bundler config.

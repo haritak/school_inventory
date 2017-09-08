@@ -3,6 +3,7 @@
 <table border=1>
   <tr>
     <td>
+      <p><small><%=@item.id%></small></p>
       <p>
       <strong>Serial:</strong> 
       <%= @item.serial %>
@@ -46,7 +47,7 @@
 
     <p>
     <strong>Photo:</strong>
-    <% if @item.photo_data %>
+    <% if @item.primary_photo %>
       <br>
       <a target="_blank" href=<%= url_for(action: :picture, id: @item.id ) %>>
         <img width=320 src=<%= url_for(action: :picture_thumb, id: @item.id ) %> />
@@ -58,7 +59,7 @@
 
     <p>
     <strong>Second photo:</strong>
-    <% if @item.photo_data2 %>
+    <% if @item.secondary_photo %>
       <br>
       <a target="_blank" href=<%= url_for(action: :second_picture, id: @item.id) %> >
         click for the second picture

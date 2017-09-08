@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Primary Photos</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @primary_photos.each do |primary_photo| %>
+      <tr>
+        <td><%= link_to 'Show', primary_photo %></td>
+        <td><%= link_to 'Edit', edit_primary_photo_path(primary_photo) %></td>
+        <td><%= link_to 'Destroy', primary_photo, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Primary Photo', new_primary_photo_path %>

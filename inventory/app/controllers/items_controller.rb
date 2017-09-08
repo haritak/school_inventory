@@ -1,13 +1,22 @@
 class ItemsController < ApplicationController
-  before_action :set_item, only: [:show, :edit, :update, :destroy, :picture, :picture_thumb, :second_picture, :invoice]
+  before_action :set_item, only: [:show, :edit, :update, :destroy,
+                                  :picture, :picture_thumb, 
+                                  :second_picture, :invoice]
 
   before_action :check_can_add, only: [:new, :create]
   before_action :check_can_edit, only:[:edit, :update, :destroy]
 
-  skip_before_action :authorize, only:[:show, :picture, :picture_thumb, :second_picture, :invoice, :not_found]
+  skip_before_action :authorize, only:[:show, :picture, 
+                                       :picture_thumb, :second_picture, 
+                                       :invoice, :not_found]
 
   Thumbs_Directory = "./thumbnails/"
+  Photos_Directory = "./item_photos/"
 
+  #
+  # Nothing is deleted.
+  # Just burned.
+  #
   def destroyed
     @items = Item.where( burned: true ).order(:serial)
     render :index
@@ -34,6 +43,7 @@ class ItemsController < ApplicationController
   end
 
   def not_found
+    raise "Not found" #TODO
   end
 
   # GET /items/1
@@ -45,17 +55,17 @@ class ItemsController < ApplicationController
   end
 
   def picture
-    return if not @item
-    return if not @item.photo_data
-    send_data(@item.photo_data,
+    return if not @item.primary_photo
+    ppfilename = photo_full_path( @item.primary_photo )
+
+    send_file(ppfilename,
               filename: "#{@item.serial}.jpeg",
               type: "image/jpeg",
               disposition: "inline")
   end
 
   def remove_picture_thumb
-    thumbnail = "#{@item.id}-photo_data-thumb.jpg" #do not use the serial, as it is editable
-    filename = "#{Thumbs_Directory}#{thumbnail}"
+    filename = thumb_full_path( @item.primary_photo )
     begin
       FileUtils.rm filename
     rescue 
@@ -63,42 +73,35 @@ class ItemsController < ApplicationController
   end
 
   def picture_thumb
-    return if not @item
-    return if not @item.photo_data
+    pphoto = @item.primary_photo
+    return if not pphoto
 
-    thumbnail = "#{@item.id}-photo_data-thumb.jpg" #do not use the serial, as it is editable
-    filename = "#{Thumbs_Directory}#{thumbnail}"
-    
-    tmp_filename = "#{filename}.tmp"
+    filename = thumb_full_path( pphoto ) 
 
     if not File.exist?(filename)
       FileUtils.mkdir(Thumbs_Directory) if not File.exist?(Thumbs_Directory)
 
-      File.open( tmp_filename, "wb") do |f|
-        f.write @item.photo_data
-      end
-      `convert #{tmp_filename} -resize 320 #{filename}`
-    elsif File.exist?(tmp_filename)
-      #remove all temporary files under Thumbs_Directory
-      FileUtils.rm Dir.glob "#{Thumbs_Directory}*.tmp"
+      `convert #{Photos_Directory}#{pphoto.filename} -resize 320 #{filename}`
     end
 
     send_file(filename)
   end
 
   def second_picture
-    return if not @item
-    return if not @item.photo_data2
-    send_data(@item.photo_data2,
+    sphoto = @item.secondary_photo
+    return if not sphoto
+    
+    send_file(photo_full_path( sphoto ),
               filename: "#{@item.serial}-2.jpeg",
               type: "image/jpeg",
               disposition: "inline")
   end
 
   def invoice
-    return if not @item
-    return if not @item.invoice
-    send_data(@item.invoice,
+    iphoto = @item.invoice_photo
+    return if not iphoto
+
+    send_file(photo_full_path( iphoto ),
               filename: "#{@item.serial}-invoice.jpg",
               type: "image/jpg",
               disposition: "inline")
@@ -121,12 +124,12 @@ class ItemsController < ApplicationController
     # 
     # ! item_params cannot be altered !
     #
-    # Trying to delete an attribute will simply fail.
+    # Trying to delete an attribute will simply not happen (silently).
     # TODO : need a reference here to explain why.
     #
     processed_params = item_params
 
-    #following parameters are not stored in database
+    #following parameters are not used upon creation
     processed_params.delete :remove_photo
     processed_params.delete :remove_second_photo
     processed_params.delete :remove_invoice
@@ -173,6 +176,7 @@ class ItemsController < ApplicationController
       processed_params.merge!( uploaded_invoice: nil )
     end
 
+    #we don't need them any more:
     processed_params.delete :remove_photo
     processed_params.delete :remove_second_photo
     processed_params.delete :remove_invoice
@@ -280,13 +284,20 @@ class ItemsController < ApplicationController
 
   private
 
+  def photo_full_path( photo_item ) 
+    "#{Photos_Directory}#{photo_item.filename}"
+  end
+  def thumb_full_path( photo_item ) 
+    "#{Thumbs_Directory}#{photo_item.thumbnail_filename}"
+  end
+
     def create_item_edits(i, p)
       p.each do |k,v|
         old_v = i.send(k)
         new_v = v
         if k.include?("photo") or k.include?("invoice")
           #it's an image
-          new_v = (v!=nil ? v.read : nil)
+          new_v = (v!=nil ? v.filename : nil)
         end
 
         if new_v.to_s != old_v.to_s

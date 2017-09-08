@@ -1,0 +1,17 @@
+<%= form_with(model: secondary_photo, local: true) do |form| %>
+  <% if secondary_photo.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(secondary_photo.errors.count, "error") %> prohibited this secondary_photo from being saved:</h2>
+
+      <ul>
+      <% secondary_photo.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

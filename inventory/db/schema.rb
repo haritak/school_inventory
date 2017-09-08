@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170907125125) do
+ActiveRecord::Schema.define(version: 20170908023900) do
 
   create_table "item_categories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "category", null: false
@@ -51,7 +51,6 @@ ActiveRecord::Schema.define(version: 20170907125125) do
     t.datetime "updated_at", null: false
     t.string "description"
     t.string "type"
-    t.index ["filename"], name: "index_item_photos_on_filename", unique: true
     t.index ["item_id"], name: "index_item_photos_on_item_id"
   end
 
