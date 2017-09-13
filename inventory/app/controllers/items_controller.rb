@@ -65,6 +65,7 @@ class ItemsController < ApplicationController
   end
 
   def remove_picture_thumb
+    return if not @item.primary_photo
     filename = thumb_full_path( @item.primary_photo )
     begin
       FileUtils.rm filename
@@ -235,19 +236,18 @@ class ItemsController < ApplicationController
     puts "Found item #{item.serial} that matches the scanned qr code."
 
     @item = item
-    if not @item.photo_data
-      @item.photo_data = params[:uploaded_picture].read
-      @item.update( photo_data: @item.photo_data )
+    if not @item.primary_photo
+      @item.update( uploaded_picture: params[:uploaded_picture] )
       redirect_to( @item ) and return
     end
 
-    if not @item.photo_data2
-      @item.photo_data2 = params[:uploaded_picture].read
-      @item.update( photo_data2: @item.photo_data2 )
+    if not @item.secondary_photo
+      @item.update( uploaded_second_picture: params[:uploaded_second_picture] )
       redirect_to( @item ) and return
     end
 
-    raise "Both photos have been uploaded. Remove a photo to upload a new one."
+    #TODO : Allow more pictures, just do not tag them as primary or secondary
+    raise "Item #{item.serial}: Both photos have been uploaded. Remove a photo to upload a new one."
   end
 
   # GET /upload_invoice

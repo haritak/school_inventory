@@ -228,4 +228,7 @@ class Item < ApplicationRecord
 
     target.destroy if target
     #actually the file is not removed for tracing reasons
+
+  end
+
 end

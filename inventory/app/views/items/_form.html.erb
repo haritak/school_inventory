@@ -64,7 +64,7 @@
   <div class="field">
     <%= form.label "Main photo with qr code" %>
     <p>
-    <% if @item.photo_data %>
+    <% if @item.primary_photo %>
       <br>
       <a target="_blank" href=<%= url_for(action: :picture, id: @item.id ) %>>
         <img width=320 src=<%= url_for(action: :picture_thumb, id: @item.id ) %> />

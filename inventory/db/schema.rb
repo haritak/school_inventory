@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170908023900) do
+ActiveRecord::Schema.define(version: 20170913025754) do
 
   create_table "item_categories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "category", null: false
@@ -58,11 +58,8 @@ ActiveRecord::Schema.define(version: 20170908023900) do
     t.string "serial", null: false
     t.string "description"
     t.string "page_url"
-    t.binary "photo_data", limit: 16777215
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.binary "photo_data2", limit: 16777215
-    t.binary "invoice", limit: 16777215
     t.bigint "container_id"
     t.bigint "user_id"
     t.integer "quantity", default: 1
