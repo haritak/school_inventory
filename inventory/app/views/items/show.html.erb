@@ -71,7 +71,7 @@
 
     <p>
     <strong>Invoice:</strong>
-    <% if @item.invoice %>
+    <% if @item.invoice_photo %>
       <a target="_blank" href=<%= url_for(action: :invoice, id: @item.id) %> >JPG</a>
     <% else %>
       none

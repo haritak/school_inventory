@@ -258,12 +258,10 @@ class ItemsController < ApplicationController
   #Code is heavily duplicated here and in item.rb
   def search_and_place_invoice
     serial_no = detect_serial_number( params[:uploaded_invoice] )
+    raise "QR-code not readable." if not serial_no
+    serial_no.strip!
+    raise "QR-code not readable (2)." if serial_no==""
 
-    if not serial_no
-      redirect_to(action: not_found)
-      return
-    end
- 
     item = Item.find_by( serial: serial_no )
     if item == nil
       redirect_to(action: not_found)
@@ -273,9 +271,8 @@ class ItemsController < ApplicationController
     puts "Found item #{item.serial} that matches the scanned qr code."
 
     @item = item
-    if not @item.invoice
-      @item.invoice = params[:uploaded_invoice].read
-      @item.update( invoice: @item.invoice )
+    if not @item.invoice_photo
+      @item.update( uploaded_invoice: params[:uploaded_invoice] )
       redirect_to( @item ) and return
     else
       raise "Item already has an invoice."
@@ -295,9 +292,10 @@ class ItemsController < ApplicationController
       p.each do |k,v|
         old_v = i.send(k)
         new_v = v
-        if k.include?("photo") or k.include?("invoice")
+        if k.include?("uploaded") and v!=nil
           #it's an image
-          new_v = (v!=nil ? v.filename : nil)
+          sha256 = i.calc_sha256( v.tempfile )
+          new_v = i.get_base_filename( sha256 )
         end
 
         if new_v.to_s != old_v.to_s

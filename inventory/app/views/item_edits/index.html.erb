@@ -23,14 +23,8 @@
         <tr>
           <td><%= edit.item_id %></td>
           <td><%= edit.field_name %> </td>
-          <% if edit.field_name.include?("picture") or
-              edit.field_name.include?("invoice") %>
-            <td>photo</td>
-            <td>photo</td>
-          <% else %>
-            <td><%= edit.old_value %></td>
-            <td><%= edit.new_value %></td>
-          <%end%>
+          <td><%= edit.old_value %></td>
+          <td><%= edit.new_value %></td>
           <td><%= edit.user_id %></td>
           <td><%= edit.created_at %></td>
           <td> ------------- </td>

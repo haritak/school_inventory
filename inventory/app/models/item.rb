@@ -59,8 +59,15 @@ class Item < ApplicationRecord
 
 
   def uploaded_picture
-    self.primary_photo
+    self.primary_photo ? self.primary_photo.filename : nil
   end
+  def uploaded_second_picture
+    self.secondary_photo ? self.secondary_photo.filename : nil
+  end
+  def uploaded_invoice
+    self.invoice_photo ? self.invoice_photo.filename : nil
+  end
+
 
   #Code is heavily duplicated here and in items_controller.rb
   def uploaded_picture=(picture_field)
@@ -136,10 +143,6 @@ class Item < ApplicationRecord
     accept_photo_file( picture_field.tempfile, 2 )
   end
 
-  def uploaded_second_picture
-    self.secondary_photo
-  end
-
   def uploaded_invoice=(invoice_field)
 
     if invoice_field == nil
@@ -150,23 +153,30 @@ class Item < ApplicationRecord
     accept_photo_file( invoice_field.tempfile, 3 )
   end
 
-  def uploaded_invoice
-    self.invoice
-  end
-
   def get_immediate_contents
     a = Item.where( container_id: self.id )
   end
 
-  def invoice
-    return nil if item_photos.length == 0
-    if item_photos.length>1
-      item_photos.each do |ip|
-        return true if ip.description == "invoice"
-      end
-    end
+  def calc_sha256( tmp_file )
+    sha256 = `sha256sum #{File.absolute_path(tmp_file)}`
 
-    return false
+    raise "SHA256 calculation error." if not sha256
+    raise "SHA256 calculation error." if sha256.length==0
+    sha256 = sha256.split()
+    raise "SHA256 calculation error." if sha256.length==0
+    sha256 = sha256[0]
+    raise "SHA256 calculation error." if sha256.length<10
+
+    return sha256
+  end
+
+  def get_base_filename( sha256 )
+    "#{sha256}.jpg"
+  end
+
+  def get_image_filename( sha256 ) 
+    base_filename = get_base_filename( sha256 )
+    "#{ItemsController::Photos_Directory}#{base_filename}"
   end
 
   private
@@ -178,21 +188,12 @@ class Item < ApplicationRecord
   #  other - just a photo
   def accept_photo_file( tmp_file, photo_type = 1 )
     #Calculate sha256 used as the base filename
-    sha256 = `sha256sum #{File.absolute_path(tmp_file)}`
-
-    raise "SHA256 calculation error." if not sha256
-    raise "SHA256 calculation error." if sha256.length==0
-    sha256 = sha256.split()
-    raise "SHA256 calculation error." if sha256.length==0
-    sha256 = sha256[0]
-    raise "SHA256 calculation error." if sha256.length<10
-
+    sha256 = calc_sha256( tmp_file )
     puts sha256
 
     #move the uploaded file to our Photos_Directory
     uploaded_filename = File.absolute_path( tmp_file )
-    stored_filename_relative = "#{ItemsController::Photos_Directory}#{sha256}.jpg"
-    stored_filename = File.absolute_path( stored_filename_relative )
+    stored_filename = File.absolute_path( get_image_filename( sha256 )  )
     FileUtils.mv( uploaded_filename, stored_filename )
 
     #file the photo 
