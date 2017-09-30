@@ -126,7 +126,7 @@ class ItemsController < ApplicationController
     # ! item_params cannot be altered !
     #
     # Trying to delete an attribute will simply not happen (silently).
-    # TODO : need a reference here to explain why.
+    # That's because item_params is a call to a method returning a value...
     #
     processed_params = item_params
 

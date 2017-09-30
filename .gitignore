@@ -10,6 +10,7 @@ tmp/**/*
 **/*.pdf
 item_images
 item_photos
+inventory/scripts/batch_auto_file_photos/
 
 
 # Ignore bundler config.
