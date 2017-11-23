@@ -1,0 +1,13 @@
+<% logged_user = User.find(session[:user_id]) %>
+<h1> Results of auto-uploading invoice </h1>
+<ul>
+<% @results.each do |result| %>
+  <li>
+    <%= result %>
+  </li>
+<% end %>
+</ul>
+<p>
+<%= @result.length %> qr-codes were detected.
+</p>
+

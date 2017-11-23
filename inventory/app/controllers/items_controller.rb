@@ -217,7 +217,7 @@ class ItemsController < ApplicationController
   #POST /upload_photo
   #Code is heavily duplicated here and in item.rb
   def search_and_place_photo
-    serial_no = detect_serial_number(params[:uploaded_picture])
+    serial_no = detect_single_serial_number(params[:uploaded_picture])
     raise "QR-code not readable." if not serial_no
     serial_no.strip!
     raise "QR-code not readable (2)." if serial_no==""
@@ -257,25 +257,30 @@ class ItemsController < ApplicationController
   #POST /upload_invoice
   #Code is heavily duplicated here and in item.rb
   def search_and_place_invoice
-    serial_no = detect_serial_number( params[:uploaded_invoice] )
-    raise "QR-code not readable." if not serial_no
-    serial_no.strip!
-    raise "QR-code not readable (2)." if serial_no==""
-
-    item = Item.find_by( serial: serial_no )
-    if item == nil
-      redirect_to(action: not_found)
-      return
+    serials = detect_all_serial_numbers( params[:uploaded_invoice] )
+    raise "QR-code not readable." if not serials
+    raise "QR-code not readable." if serials.length == 0
+    serials.each do |serial_no|
+      serial_no.strip!
     end
 
-    puts "Found item #{item.serial} that matches the scanned qr code."
+    @results=[]
+    serials.each do |serial_no|
+      item = Item.find_by( serial: serial_no )
+      if item == nil
+        @results << "item #{serial_no} not found"
+        next
+      end
 
-    @item = item
-    if not @item.invoice_photo
-      @item.update( uploaded_invoice: params[:uploaded_invoice] )
-      redirect_to( @item ) and return
-    else
-      raise "Item already has an invoice."
+      puts "Found item #{item.serial} that matches the scanned qr code."
+
+      @item = item
+      if not @item.invoice_photo
+        @item.update( uploaded_invoice: params[:uploaded_invoice] )
+        @results << "#{serial_no} OK"
+      else
+        @results << "Item #{serial_no} already has an invoice."
+      end
     end
   end
 
@@ -310,15 +315,25 @@ class ItemsController < ApplicationController
       end
     end
 
-    def detect_serial_number(source)
+    def detect_single_serial_number(source)
+      all_serials = detect_all_serial_numbers(source)
+      if all_serials.length > 1
+        #two codes found, user has to input the code manually
+        puts "More than one code detected in the photo. User should type the right code manually"
+        serial_found = false
+        raise "More than one code detected in photo"
+      end
+      return all_serials[0]
+    end
+
+    def detect_all_serial_numbers(source)
       apath = File.absolute_path(source.tempfile)
       scanned_qr = `zbarimg #{apath}`
       puts scanned_qr
 
       return nil unless scanned_qr
 
-      serial_no = ""
-      serial_found = false
+      serials = []
       scanned_qr.lines.each do |detected_code|
         if detected_code =~ /srv-1tee-moiron\.ira\.sch\.gr/
           puts "detected inventory code : #{detected_code}"
@@ -328,23 +343,17 @@ class ItemsController < ApplicationController
           next if not code_parts[ code_parts.length - 1]
           next if code_parts[ code_parts.length - 1].length == 0
 
-          if serial_found
-            #two codes found, user has to input the code manually
-            puts "More than one code detected in the photo. User should type the right code manually"
-            serial_found = false
-            raise "More than one code detected in photo"
-          end
 
           serial_no = code_parts[ code_parts.length - 1 ].strip
           if serial_no.include?("?") #there are parameters at the end
             serial_no = serial_no[0, serial_no.index("?")]
           end
+          serials << serial_no
 
           puts "->#{serial_no}<-"
-          serial_found = true
         end
       end
-      return serial_no
+      return serials
     end
 
     # Use callbacks to share common setup or constraints between actions.
