@@ -257,7 +257,8 @@ class ItemsController < ApplicationController
   #POST /upload_invoice
   #Code is heavily duplicated here and in item.rb
   def search_and_place_invoice
-    serials = detect_all_serial_numbers( params[:uploaded_invoice] )
+    uploaded_invoice = params[:uploaded_invoice]
+    serials = detect_all_serial_numbers( uploaded_invoice )
     raise "QR-code not readable." if not serials
     raise "QR-code not readable." if serials.length == 0
     serials.each do |serial_no|
@@ -276,8 +277,13 @@ class ItemsController < ApplicationController
 
       @item = item
       if not @item.invoice_photo
-        @item.update( uploaded_invoice: params[:uploaded_invoice] )
+        @item.update( uploaded_invoice: uploaded_invoice )
         @results << "#{serial_no} OK"
+        #XXX At this point, due to the @item.update above,
+        #the uploaded invoice has been renamed (moved).
+        #Therefore we cannot use params[:uploaded_invoice] any more.
+        #We need to updated it to the newly moved file
+        uploaded_invoice = @item.invoice_photo
       else
         @results << "Item #{serial_no} already has an invoice."
       end
