@@ -3,8 +3,8 @@
 #
 require 'thread'
 
-DRY_RUN = true
-LIMIT = 5
+DRY_RUN = true #do not file anything
+LIMIT = 5000
 
 source_dir = "autofile"
 done_dir = "completed"
