@@ -11,7 +11,7 @@ LabelsType = "AveryL6009_Canon"
 SRV_URL = "srv-1tee-moiron.ira.sch.gr"
 SRV_PORT= "3000"
 tmp_dir = "./tmp"
-katagrafi="1706"
+katagrafi="1803"
 
 if not File.directory?(tmp_dir) 
   puts "Error! Temporary directory does not exists"
@@ -29,7 +29,7 @@ password = gets.strip
 
 serials = []
 count=0
-200.times do |no|
+96.times do |no|
   number = 1 + no
 
   serial = sprintf "I%s%04d", katagrafi, number

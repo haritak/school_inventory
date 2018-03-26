@@ -7,7 +7,7 @@ Prawn::Labels.types = 'custom.yaml'
 SRV_URL = "srv-1tee-moiron.ira.sch.gr"
 SRV_PORT= "3000"
 tmp_dir = "./tmp"
-katagrafi="1706"
+katagrafi="1803"
 
 if not File.directory?(tmp_dir) 
   puts "Error! Temporary directory does not exists"
@@ -21,18 +21,19 @@ end
 
 names = []
 count=0
-200.times do |no|
+96.times do |no|
   number = 1 + no
 
   serial = sprintf "I%s%04d", katagrafi, number
   names << serial.strip #Ενα για να μείνει το τιμολόγιο
   names << serial.strip #Ενα για να μπεί πάνω στο αντικείμενο
+  names << serial.strip #Δεύτερο για να μπεί στο αντικείμενο
   names << serial.strip #Ενα για να μπεί στην αναφορά της καταγραφής
 
   #break if (count+=1) > 10
 end
 
-targets=["τιμολόγιο", "", "αναφορά"]
+targets=["τιμολόγιο", "υλικό 1", "υλικό 2", "αναφορά"]
 tid=0
 
 Prawn::Labels.generate("etiketes.pdf", names, :type => "TypoLabel6511") do |pdf, name|
@@ -50,6 +51,6 @@ Prawn::Labels.generate("etiketes.pdf", names, :type => "TypoLabel6511") do |pdf,
   pdf.draw_text targets[tid], at: [55,y-=20], size: 7
   pdf.draw_text name,         at: [55,y-=7], size: 7 
 
-  tid=0 if (tid+=1)>2
+  tid=0 if (tid+=1)> (targets.length-1)
 
 end

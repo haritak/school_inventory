@@ -9,7 +9,7 @@ LabelsType = "TypoLabel6511"
 SRV_URL = "srv-1tee-moiron.ira.sch.gr"
 SRV_PORT= "3000"
 tmp_dir = "./tmp"
-katagrafi="170904"
+katagrafi="180321"
 
 if not File.directory?(tmp_dir) 
   puts "Error! Temporary directory does not exists"
@@ -22,9 +22,9 @@ if not Dir.empty?(tmp_dir)
 end
 
 names = []
-startAt = 22 # inclusive 
+startAt = 01 # inclusive 
              # 2017 09 04
-breakAt = 40 # 2017 09 04 (each A4 holds exactly 10 leaving two blanks)
+breakAt = 20 # 2017 09 04 (each A4 holds exactly 10 leaving two blanks)
 
 count = startAt
 100.times do |serial|
