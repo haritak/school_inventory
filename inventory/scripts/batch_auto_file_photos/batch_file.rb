@@ -1,22 +1,39 @@
-#!/usr/bin/ruby
+#!/myWork/haritak/school_inventory/inventory/bin/rails runner
 #
 #
 require 'thread'
 
-DRY_RUN = true #do not file anything
-LIMIT = 5000
+class TempFile
+  def initialize( f )
+    @tempfile = f
+  end
+
+  def tempfile
+    @tempfile
+  end
+end
+
+DRY_RUN = false #do not file anything, leave the database intact
 
 source_dir = "autofile"
 done_dir = "completed"
 failed_dir = "failed"
 
-failed = []
-done = []
+failed = [] # images that failed to file
+ready = [] # images which can be filed
+done = [] # images filed
+
+user = User.find_by( username: "haritak" )
+if not user
+  raise "Failed to find filing user."
+end
+
+puts "Filing under user #{user}"
 
 count = 0
 Dir[ "#{source_dir}/*" ].each do |filename|
   count+=1
-  break if count>LIMIT
+
   puts filename
   scanned_qr = `zbarimg #{filename}`
 
@@ -49,21 +66,78 @@ Dir[ "#{source_dir}/*" ].each do |filename|
   end
 
   if serial_no != ""
-    done << [filename, serial_no]
+    ready << [filename, serial_no]
   else
     failed << [filename, "no valid barcode detected"]
   end
 
-  if not DRY_RUN
+end
+
+ready.each do |item_line|
+  filename = item_line[0]
+  serial_no = item_line[1]
+  puts "Working on #{filename} with serial no #{serial_no}"
+
+  item = Item.find_by( serial: serial_no )
+  if not item
+    puts "Not found in database"
+    if not DRY_RUN
+      item = Item.create( serial: serial_no, user: user)
+    end
+  end
+  
+  next if not item and DRY_RUN
+
+  file = TempFile.new( filename )
+
+  if not item.primary_photo 
+    puts "Does not have a primary photo"
+    if not DRY_RUN 
+      item.uploaded_picture= file
+      puts "Primary photo added"
+      done << [filename, serial_no]
+      next
+    end
+  end
+  if not item.secondary_photo
+    puts "Does not have a secondary photo"
+    if not DRY_RUN
+      item.uploaded_second_picture= file
+      puts "Secondary photo added"
+      done << [filename, serial_no]
+      next
+    end
+  end
+  if not item.invoice_photo 
+    puts "Does not have an invoice photo"
+    if not DRY_RUN
+      item.uploaded_invoice= file
+      puts "Invoice photo added"
+      done << [filename, serial_no]
+      next
+    end
   end
 
 end
 
 File.open( "log.txt", "w" ) do |f|
-  all_arrays = done + failed
-  all_arrays.each do |line|
+  f.write("\nFailed\n")
+  failed.each do |line|
+    bline = sprintf "%20s, %s\n", line[0], line[1]
+    f.write( bline )
+  end
+  
+  f.write("\nReady\n")
+  ready.each do |line|
+    bline = sprintf "%20s, %s\n", line[0], line[1]
+    f.write( bline )
+  end
+
+  f.write("\nCompleted\n")
+  done.each do |line|
     bline = sprintf "%20s, %s\n", line[0], line[1]
     f.write( bline )
   end
 end
+
 
