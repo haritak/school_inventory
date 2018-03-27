@@ -10,8 +10,8 @@ class ItemsController < ApplicationController
                                        :picture_thumb, :second_picture, 
                                        :invoice, :not_found]
 
-  Thumbs_Directory = "./thumbnails/"
-  Photos_Directory = "./item_photos/"
+  Thumbs_Directory = File.join( Rails.root, "thumbnails" )
+  Photos_Directory = File.join( Rails.root, "item_photos" )
 
   #
   # Nothing is deleted.

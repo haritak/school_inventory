@@ -176,7 +176,7 @@ class Item < ApplicationRecord
 
   def get_image_filename( sha256 ) 
     base_filename = get_base_filename( sha256 )
-    "#{ItemsController::Photos_Directory}#{base_filename}"
+    File.join(ItemsController::Photos_Directory, base_filename)
   end
 
   private
