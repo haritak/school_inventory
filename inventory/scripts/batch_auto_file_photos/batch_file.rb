@@ -1,4 +1,4 @@
-#!/myWork/haritak/school_inventory/inventory/bin/rails runner
+#!../../bin/rails runner
 #
 #
 require 'thread'
