@@ -108,15 +108,20 @@ ready.each do |item_line|
       next
     end
   end
-  if not item.invoice_photo 
-    puts "Does not have an invoice photo"
-    if not DRY_RUN
-      item.uploaded_invoice= file
-      puts "Invoice photo added"
-      done << [filename, serial_no]
-      next
-    end
-  end
+  #
+  #Do not file invoice.
+  #Invoices have to be filed by hand.
+  #
+  #if not item.invoice_photo 
+  #
+    #puts "Does not have an invoice photo"
+    #if not DRY_RUN
+      #item.uploaded_invoice= file
+      #puts "Invoice photo added"
+      #done << [filename, serial_no]
+      #next
+    #end
+  #end
 
 end
 
