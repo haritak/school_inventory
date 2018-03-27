@@ -77,10 +77,10 @@ class Item < ApplicationRecord
       return
     end
 
-    accept_photo_file( picture_field.tempfile )
+    new_filename = accept_photo_file( picture_field.tempfile )
 
     #Try to get the qrcode, but don't fail on that
-    scanned_qr = `zbarimg #{File.absolute_path(picture_field.tempfile)}`
+    scanned_qr = `zbarimg #{File.absolute_path( new_filename )}`
     puts scanned_qr
 
     return if not scanned_qr
@@ -213,6 +213,8 @@ class Item < ApplicationRecord
     end
 
     pp.save
+
+    return stored_filename
 
   end
 
