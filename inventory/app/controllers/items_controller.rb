@@ -82,7 +82,7 @@ class ItemsController < ApplicationController
     if not File.exist?(filename)
       FileUtils.mkdir(Thumbs_Directory) if not File.exist?(Thumbs_Directory)
 
-      `convert #{Photos_Directory}#{pphoto.filename} -resize 320 #{filename}`
+      `convert #{File.join(Photos_Directory,pphoto.filename)} -resize 320 #{filename}`
     end
 
     send_file(filename)
@@ -293,10 +293,10 @@ class ItemsController < ApplicationController
   private
 
   def photo_full_path( photo_item ) 
-    "#{Photos_Directory}#{photo_item.filename}"
+    File.join(Photos_Directory, photo_item.filename)
   end
   def thumb_full_path( photo_item ) 
-    "#{Thumbs_Directory}#{photo_item.thumbnail_filename}"
+    File.join(Thumbs_Directory,photo_item.thumbnail_filename)
   end
 
     def create_item_edits(i, p)
