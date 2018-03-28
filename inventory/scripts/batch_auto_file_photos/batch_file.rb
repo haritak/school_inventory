@@ -22,6 +22,7 @@ failed_dir = "failed"
 failed = [] # images that failed to file
 ready = [] # images which can be filed
 done = [] # images filed
+not_found = [] #serials not found in database (will be created)
 
 user = User.find_by( username: "haritak" )
 if not user
@@ -73,6 +74,7 @@ Dir[ "#{source_dir}/*" ].each do |filename|
 
 end
 
+
 ready.each do |item_line|
   filename = item_line[0]
   serial_no = item_line[1]
@@ -81,6 +83,7 @@ ready.each do |item_line|
   item = Item.find_by( serial: serial_no )
   if not item
     puts "Not found in database"
+    not_found << [serial_no, "not found in database"]
     if not DRY_RUN
       item = Item.create( serial: serial_no, user: user)
     end
@@ -90,38 +93,44 @@ ready.each do |item_line|
 
   file = TempFile.new( filename )
 
-  if not item.primary_photo 
-    puts "Does not have a primary photo"
-    if not DRY_RUN 
-      item.uploaded_picture= file
-      puts "Primary photo added"
-      done << [filename, serial_no]
-      next
-    end
-  end
-  if not item.secondary_photo
-    puts "Does not have a secondary photo"
-    if not DRY_RUN
-      item.uploaded_second_picture= file
-      puts "Secondary photo added"
-      done << [filename, serial_no]
-      next
-    end
-  end
-  #
-  #Do not file invoice.
-  #Invoices have to be filed by hand.
-  #
-  #if not item.invoice_photo 
-  #
-    #puts "Does not have an invoice photo"
-    #if not DRY_RUN
-      #item.uploaded_invoice= file
-      #puts "Invoice photo added"
-      #done << [filename, serial_no]
-      #next
-    #end
-  #end
+	begin
+	  if not item.primary_photo 
+	    puts "Does not have a primary photo"
+	    if not DRY_RUN 
+	      item.uploaded_picture= file
+	      puts "Primary photo added"
+	      done << [filename, serial_no]
+	      next
+	    end
+	  end
+	  if not item.secondary_photo
+	    puts "Does not have a secondary photo"
+	    if not DRY_RUN
+	      item.uploaded_second_picture= file
+	      puts "Secondary photo added"
+	      done << [filename, serial_no]
+	      next
+	    end
+	  end
+	  #
+	  #Do not file invoice.
+	  #Invoices have to be filed by hand.
+	  #
+	  #if not item.invoice_photo 
+	  #
+	    #puts "Does not have an invoice photo"
+	    #if not DRY_RUN
+	      #item.uploaded_invoice= file
+	      #puts "Invoice photo added"
+	      #done << [filename, serial_no]
+	      #next
+	    #end
+	  #end
+	rescue 
+	puts "An error occured"
+	failed << [filename, "Unexpected error"]
+	end
+
 
 end
 
@@ -134,6 +143,12 @@ File.open( "log.txt", "w" ) do |f|
   
   f.write("\nReady\n")
   ready.each do |line|
+    bline = sprintf "%20s, %s\n", line[0], line[1]
+    f.write( bline )
+  end
+
+  f.write("\nNot found in database\n")
+  not_found.each do |line|
     bline = sprintf "%20s, %s\n", line[0], line[1]
     f.write( bline )
   end
