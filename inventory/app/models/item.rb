@@ -91,6 +91,7 @@ class Item < ApplicationRecord
 
     serial_no = ""
     serial_found = false
+    multiple_serials = false
 
     scanned_qr.lines.each do |detected_code|
       if detected_code =~ /srv-1tee-moiron\.ira\.sch\.gr/
@@ -105,8 +106,11 @@ class Item < ApplicationRecord
         if serial_found
           #two codes found, user has to input the code manually
           puts "More than one code detected in the photo. User should type the right code manually"
-          serial_found = false
-          raise "More than one code detected in photo"
+          multiple_serials = true
+          if not self.serial or self.serial.strip == ''
+            serial_found = false
+            raise "More than one code detected in photo"
+          end
         end
 
 
@@ -123,7 +127,7 @@ class Item < ApplicationRecord
     if serial_found
       if self.serial and self.serial.strip != ''
         puts "Already has a serial"
-        if self.serial.strip != serial_no
+        if not multiple_serials and self.serial.strip != serial_no
           raise "Serial in database differs from serial in uploaded image"
         end
       else
