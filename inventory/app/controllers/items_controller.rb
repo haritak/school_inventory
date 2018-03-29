@@ -277,13 +277,14 @@ class ItemsController < ApplicationController
 
       @item = item
       if not @item.invoice_photo
-        @item.update( uploaded_invoice: uploaded_invoice )
+        #@item.update( uploaded_invoice: uploaded_invoice) #true: copy_dont_move
+        @item.uploaded_invoice=( uploaded_invoice, true )
         @results << "#{serial_no} OK"
         #XXX At this point, due to the @item.update above,
         #the uploaded invoice has been renamed (moved).
         #Therefore we cannot use params[:uploaded_invoice] any more.
         #We need to updated it to the newly moved file
-        uploaded_invoice = @item.invoice_photo
+        #uploaded_invoice = @item.invoice_photo
       else
         @results << "Item #{serial_no} already has an invoice."
       end

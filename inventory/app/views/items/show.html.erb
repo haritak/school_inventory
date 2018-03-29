@@ -7,7 +7,7 @@
       <p>
       <strong>Serial:</strong> 
       <%= @item.serial %>
-      created by <%= @item.user.username %> <br>
+      created by <%= @item.user ? @item.user.username : "UNDEF" %> <br>
       Last edited by <%= ItemMovementsController::last_editor(@item) %>
     </p>
     </td>
