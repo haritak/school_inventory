@@ -147,14 +147,14 @@ class Item < ApplicationRecord
     accept_photo_file( picture_field.tempfile, 2 )
   end
 
-  def uploaded_invoice=(invoice_field)
+  def uploaded_invoice=(invoice_field, copy_dont_move=false)
 
     if invoice_field == nil
       remove_photo_file( 3 )
       return
     end
 
-    accept_photo_file( invoice_field.tempfile, 3 )
+    accept_photo_file( invoice_field.tempfile, 3, copy_dont_move )
   end
 
   def get_immediate_contents
@@ -190,7 +190,7 @@ class Item < ApplicationRecord
   #  2 - secondary photo
   #  3 - invoice photo
   #  other - just a photo
-  def accept_photo_file( tmp_file, photo_type = 1 )
+  def accept_photo_file( tmp_file, photo_type = 1, copy_dont_move=false )
     #Calculate sha256 used as the base filename
     sha256 = calc_sha256( tmp_file )
     puts sha256
@@ -198,7 +198,11 @@ class Item < ApplicationRecord
     #move the uploaded file to our Photos_Directory
     uploaded_filename = File.absolute_path( tmp_file )
     stored_filename = File.absolute_path( get_image_filename( sha256 )  )
-    FileUtils.mv( uploaded_filename, stored_filename )
+    if copy_dont_move
+      FileUtils.cp( uploaded_filename, stored_filename )
+    else
+      FileUtils.mv( uploaded_filename, stored_filename )
+    end
 
     #file the photo 
     pp = nil
