@@ -67,6 +67,12 @@ class Item < ApplicationRecord
   def uploaded_invoice
     self.invoice_photo ? self.invoice_photo.filename : nil
   end
+  def uploaded_invoice_full_path
+    a = uploaded_invoice
+    if a
+      return File.join(ItemsController::Photos_Directory, a)
+    end
+  end
 
 
   #Code is heavily duplicated here and in items_controller.rb
