@@ -258,6 +258,10 @@ class ItemsController < ApplicationController
   #Code is heavily duplicated here and in item.rb
   def search_and_place_invoice
     uploaded_invoice = params[:uploaded_invoice]
+    #Keep the uploaded filename
+    uploaded_filename = File.absolute_path( uploaded_invoice.tempfile )
+    puts "Uploaded invoice filename is #{uploaded_filename}"
+
     serials = detect_all_serial_numbers( uploaded_invoice )
     raise "QR-code not readable." if not serials
     raise "QR-code not readable." if serials.length == 0
@@ -266,6 +270,7 @@ class ItemsController < ApplicationController
     end
 
     @results=[]
+    previous_filename = uploaded_filename
     serials.each do |serial_no|
       item = Item.find_by( serial: serial_no )
       if item == nil
@@ -277,13 +282,22 @@ class ItemsController < ApplicationController
 
       @item = item
       if not @item.invoice_photo
+        #Copy the file to its uploaded location for the update
+        if previous_filename != uploaded_filename
+          puts previous_filename
+          puts uploaded_filename
+          FileUtils.cp( previous_filename, uploaded_filename )
+        end
+
+        #update will move the file, to internal storage
         @item.update( uploaded_invoice: uploaded_invoice )
+        @item.save
+        @item = Item.find_by( serial: serial_no )
         @results << "#{serial_no} OK"
-        #XXX At this point, due to the @item.update above,
-        #the uploaded invoice has been renamed (moved).
-        #Therefore we cannot use params[:uploaded_invoice] any more.
-        #We need to updated it to the newly moved file
-        uploaded_invoice = @item.invoice_photo
+
+        #For the next one to find the file
+        previous_filename = @item.uploaded_invoice_full_path
+        puts "Invoice filed with the name : #{previous_filename}"
       else
         @results << "Item #{serial_no} already has an invoice."
       end
