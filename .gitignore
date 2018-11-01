@@ -15,6 +15,7 @@ inventory/scripts/batch_auto_file_photos/
 
 # Ignore bundler config.
 /.bundle
+local_gems
 
 # Ignore the default SQLite database.
 /db/*.sqlite3
