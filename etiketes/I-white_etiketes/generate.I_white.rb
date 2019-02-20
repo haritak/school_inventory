@@ -9,7 +9,7 @@ LabelsType = "TypoLabel6511"
 SRV_URL = "srv-1tee-moiron.ira.sch.gr"
 SRV_PORT= "3000"
 tmp_dir = "./tmp"
-katagrafi="180321"
+katagrafi="1809"
 
 if not File.directory?(tmp_dir) 
   puts "Error! Temporary directory does not exists"
@@ -27,7 +27,7 @@ startAt = 01 # inclusive
 breakAt = 20 # 2017 09 04 (each A4 holds exactly 10 leaving two blanks)
 
 count = startAt
-100.times do |serial|
+20.times do |serial|
   code = sprintf "I#{katagrafi}%03d", startAt + serial
 
   names << code #Μία για το τιμολόγιο
