@@ -9,7 +9,7 @@ LabelsType = "TypoLabel6511"
 SRV_URL = "srv-1tee-moiron.ira.sch.gr"
 SRV_PORT= "3000"
 tmp_dir = "./tmp"
-katagrafi="1809"
+katagrafi="GNL1805" #Geo Nutrion Lab year month
 
 if not File.directory?(tmp_dir) 
   puts "Error! Temporary directory does not exists"
@@ -24,20 +24,21 @@ end
 names = []
 startAt = 01 # inclusive 
              # 2017 09 04
-breakAt = 20 # 2017 09 04 (each A4 holds exactly 10 leaving two blanks)
+breakAt = 100 # 2017 09 04 (each A4 holds exactly 10 leaving two blanks)
 
 count = startAt
-20.times do |serial|
-  code = sprintf "I#{katagrafi}%03d", startAt + serial
+100.times do |serial|
+  code = sprintf "#{katagrafi}%04d", startAt + serial
 
   names << code #Μία για το τιμολόγιο
+  names << code #Μία για το αντικείμενο
   names << code #Μία για το αντικείμενο
   names << code #Μία για την αναφορά
 
   break if not (count+=1) <= breakAt
 end
 
-targets=["τιμολόγιο", "", "αναφορά"]
+targets=["τιμολόγιο", "αντι1", "άντι2", "αναφορά"]
 tid=0
 
 Prawn::Labels.generate("etiketes.pdf", names, :type => LabelsType) do |pdf, name|
@@ -55,6 +56,6 @@ Prawn::Labels.generate("etiketes.pdf", names, :type => LabelsType) do |pdf, name
   pdf.draw_text targets[tid], at: [55,y-=20], size: 7
   pdf.draw_text name,         at: [55,y-=7], size: 7 
 
-  tid=0 if (tid+=1)>2
+  tid=0 if (tid+=1) > targets.length-1
 
 end
