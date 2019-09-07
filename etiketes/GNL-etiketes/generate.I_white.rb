@@ -9,7 +9,7 @@ LabelsType = "TypoLabel6511"
 SRV_URL = "srv-1tee-moiron.ira.sch.gr"
 SRV_PORT= "3000"
 tmp_dir = "./tmp"
-katagrafi="GNL1805" #Geo Nutrion Lab year month
+katagrafi="GNL1905" #Geo Nutrion Lab year month
 
 if not File.directory?(tmp_dir) 
   puts "Error! Temporary directory does not exists"
