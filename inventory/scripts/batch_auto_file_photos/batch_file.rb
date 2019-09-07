@@ -1,7 +1,15 @@
 #!../../bin/rails runner
 #
 #
-require 'thread'
+file_under_username = "haritak"
+DRY_RUN = false #do not file anything, leave the database intact
+
+
+
+user = User.find_by( username: file_under_username )
+if not user
+  raise "Failed to find filing user."
+end
 
 class TempFile
   def initialize( f )
@@ -13,7 +21,6 @@ class TempFile
   end
 end
 
-DRY_RUN = false #do not file anything, leave the database intact
 
 source_dir = "autofile"
 done_dir = "completed"
@@ -23,11 +30,6 @@ failed = [] # images that failed to file
 ready = [] # images which can be filed
 done = [] # images filed
 not_found = [] #serials not found in database (will be created)
-
-user = User.find_by( username: "haritak" )
-if not user
-  raise "Failed to find filing user."
-end
 
 puts "Filing under user #{user}"
 
@@ -61,8 +63,6 @@ Dir[ "#{source_dir}/*" ].each do |filename|
       if serial_no.include?("?") #there are parameters at the end
         serial_no = serial_no[0, serial_no.index("?")]
       end
-
-      puts serial_no
     end
   end
 
@@ -89,7 +89,7 @@ ready.each do |item_line|
     end
   end
   
-  next if not item and DRY_RUN
+  next if not item or DRY_RUN
 
   file = TempFile.new( filename )
 
