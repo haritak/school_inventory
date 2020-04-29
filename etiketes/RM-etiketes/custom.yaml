@@ -45,3 +45,26 @@ AveryL6009_HP:
     column_gutter: 7.1 # 0.25 cm
     row_gutter: 0
 
+AveryL6009_UTAX:
+    paper_size: A4
+    top_margin: 66 #62.4 #2.2cm 
+    bottom_margin: 54 #59.5 #2.1cm
+    left_margin: 28.346 #1 cm
+    right_margin: 28.346 #1 cm
+    columns: 4
+    rows: 12
+    #column_gutter: 8.504
+    column_gutter: 7.1 # 0.25 cm
+    row_gutter: 0
+
+AveryL6009_MS312dn:
+    #MS312dn from Lexmark
+    paper_size: A4
+    top_margin: 59.5266 #21mm -> 59.5266
+    bottom_margin: 69.4477 #21.5mm -> 60.9439, 21.5+2 -> 66.6131
+    left_margin: 28.346 #10 mm -> 28.346
+    right_margin: 28.346 #10 mm -> 28.346
+    columns: 4
+    rows: 12
+    column_gutter: 7.0868 # 2.5 mm -> 7.0865
+    row_gutter: 0 # 0mm ->
