@@ -69,6 +69,15 @@
     <% end %>
     </p>
 
+    <strong>all other photos:</strong>
+    <% @item.other_photos.each do |photo_id| %>
+	      <br>
+	      <a target="_blank" href=<%= url_for(action: :second_picture, id: @item.id, photo_id: photo_id) %> >
+		click for another picture
+	      </a>
+    <% end %>
+    </p>
+
     <p>
     <strong>Invoice:</strong>
     <% if @item.invoice_photo %>

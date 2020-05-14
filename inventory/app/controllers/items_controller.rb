@@ -90,10 +90,16 @@ class ItemsController < ApplicationController
 
   def second_picture
     sphoto = @item.secondary_photo
+    filename = "#{@item.serial}-2.jpeg" #maybe not needed?
+    if params[:photo_id]
+      sphoto = ItemPhoto.find(params[:photo_id])
+    end
+
     return if not sphoto
+    filename = sphoto.filename
     
     send_file(photo_full_path( sphoto ),
-              filename: "#{@item.serial}-2.jpeg",
+              filename: filename,
               type: "image/jpeg",
               disposition: "inline")
   end
@@ -242,12 +248,16 @@ class ItemsController < ApplicationController
     end
 
     if not @item.secondary_photo
-      @item.update( uploaded_second_picture: params[:uploaded_second_picture] )
+      @item.update( uploaded_second_picture: params[:uploaded_picture] )
       redirect_to( @item ) and return
     end
 
     #TODO : Allow more pictures, just do not tag them as primary or secondary
-    raise "Item #{item.serial}: Both photos have been uploaded. Remove a photo to upload a new one."
+    #raise "Item #{item.serial}: Both photos have been uploaded. Remove a photo to upload a new one."
+
+    @item.update( uploaded_second_picture: params[:uploaded_picture] )
+    redirect_to( @item ) and return
+
   end
 
   # GET /upload_invoice

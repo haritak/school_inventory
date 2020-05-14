@@ -18,6 +18,10 @@ class Item < ApplicationRecord
     self.save
   end
 
+  def other_photos
+    ItemPhoto.where(item_id: id).ids
+  end
+
   def username(uid = @user_id)
     @username = "undef"
     @user = User.find_by(id: uid)
